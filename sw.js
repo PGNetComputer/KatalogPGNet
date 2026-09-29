@@ -7,9 +7,9 @@
      data diatur oleh index.html (disimpan di browser, cek tiap 5 menit).
    Kalau mengubah daftar file di ASET, naikkan angka VERSI.
    ============================================================ */
-var VERSI = 'katalog-pgnet-v1';
+var VERSI = 'katalog-pgnet-v2';
 var ASET = ['./', './index.html', './config.js', './manifest.json',
-            './ikon-192.png', './ikon-512.png', './ikon-maskable-512.png', './apple-touch-icon.png'];
+            './logo-96.png', './ikon-192.png', './ikon-512.png', './ikon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(VERSI).then(function (c) { return c.addAll(ASET); }).then(function () { return self.skipWaiting(); }));
