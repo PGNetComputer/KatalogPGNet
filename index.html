@@ -495,10 +495,9 @@ function teksList(L){
 
 /* 2) gambar tabel seperti screenshot sheet (dipecah per 55 baris) */
 function gambarList(L){
-  var S=2,P=16,RH=30,GH=30,HH=84,CH=28,MAX=55;
+  var S=2,P=16,RH=30,GH=30,HH=84,CH=0,MAX=55;   /* CH=0: tanpa baris judul kolom */
   var banyak=L.sek.length>1, rows=[];
   L.sek.forEach(function(s){
-    if(banyak)rows.push({k:s.judul});
     s.g.forEach(function(g){if(g.n&&!(L.induk&&!banyak))rows.push({g:g.n});g.it.forEach(function(x){rows.push({x:x});});});
   });
   var bag=[];for(var i=0;i<rows.length;i+=MAX)bag.push(rows.slice(i,i+MAX));
@@ -525,9 +524,7 @@ function gambarList(L){
     c.fillStyle='#fff';c.font='800 13px '+F;c.fillText(potong(c,'PGNet Computer'+(L.induk?'  ·  '+L.induk:''),W-P*2-33),P+33,24);
     c.font='900 22px '+F;c.fillText(potong(c,L.judul+(bag.length>1?'  ('+(pi+1)+'/'+bag.length+')':''),W-P*2),P,52);
     c.font='500 12.5px '+F;c.globalAlpha=.85;var sub='Update '+UPD+' · harga & stok dapat berubah';if(c.measureText(sub).width>W-P*2)sub='Update '+UPD;c.fillText(potong(c,sub,W-P*2),P,72);c.globalAlpha=1;
-    var y=HH;c.fillStyle='#e4dccd';c.fillRect(0,y,W,CH);
-    c.fillStyle='#5d5953';c.font='800 12.5px '+F;c.textBaseline='middle';
-    c.fillText('Nama Barang',P,y+CH/2);c.textAlign='center';c.fillText('Qty',KQ,y+CH/2);c.textAlign='right';c.fillText('Harga',KH,y+CH/2);c.textAlign='left';
+    var y=HH;c.textBaseline='middle';
     y+=CH;var z=0;
     p.forEach(function(r){
       if(r.k){c.fillStyle='#dcebe2';c.fillRect(0,y,W,KB);c.fillStyle='#2f5d4a';c.fillRect(0,y,5,KB);c.font='900 15px '+F;c.fillText(potong(c,r.k.toUpperCase(),W-P*2),P,y+KB/2);y+=KB;z=0;return;}
