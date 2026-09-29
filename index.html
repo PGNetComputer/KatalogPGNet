@@ -47,11 +47,27 @@ button{font-family:inherit}
 .sc.on{background:#fff;color:var(--hijau);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .infoCari{padding:0 12px 9px;font-size:12px;color:var(--abu)}
 .isi{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
-.kat{padding:14px 14px 7px;font-size:12px;font-weight:800;color:var(--hijau);letter-spacing:.3px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline;background:var(--latar)}
-.kat span{font-weight:600;color:var(--abu2);text-transform:none;letter-spacing:0}
-.grup{position:sticky;top:0;background:#efe9df;font-size:12.5px;font-weight:800;color:#5d5953;padding:7px 14px;z-index:1;display:flex;justify-content:space-between;cursor:pointer;user-select:none}
-.grup .pn{display:inline-block;transition:transform .15s;margin-right:4px}
-.grup.tutup .pn{transform:rotate(-90deg)}
+/* ---- judul kategori & kelompok (dasar) ---- */
+section{position:relative}
+.kat{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;height:var(--kh)}
+.kat .kj{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kat .kn{flex:none}
+.grup{position:sticky;top:var(--kh);z-index:1;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.grup .gn{flex:1;min-width:0}
+.grup .gn b{display:block;font-size:14.5px;font-weight:700;color:var(--tinta)}
+.grup .gu{flex:none;font-size:12.5px;font-weight:700}
+.grup .pn{flex:none;color:var(--abu2);font-size:20px;line-height:1;transition:transform .15s}
+.grup.buka .pn{transform:rotate(90deg)}
+/* ---- judul kategori: pita hijau ---- */
+.app{--kh:46px}
+.kat{background:var(--hijau);color:#fff;padding:0 14px;font-size:14px;font-weight:800;letter-spacing:.3px;text-transform:uppercase}
+.kat .kn{background:rgba(255,255,255,.2);border-radius:10px;padding:2px 9px;font-size:11.5px;text-transform:none;letter-spacing:0}
+.grup{background:#fff;padding:13px 14px;border-bottom:1px solid var(--garis2)}
+.grup .gu{color:var(--hijau);background:var(--hijau2);border-radius:10px;padding:2px 8px}
+.grup.buka{background:#eef5f0}
+.gisi .item{padding-left:24px;background:#fbfaf7}
+/* hasil cari: judul kelompok tidak perlu bisa ditutup */
+.cari-aktif .grup{cursor:default}.cari-aktif .grup .pn{display:none}
 .item{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 14px;border-bottom:1px solid var(--garis2);background:var(--kartu);cursor:pointer}
 .item:active{background:#f1ede5}
 .item.dikeranjang{background:#f3f8f4}
@@ -151,7 +167,7 @@ var WA='', JAM='', UPD='', TS=0, TAB=['Processor','RAM','SSD','Others Parts'], S
 var KAT=[], PETA={}, ADA_DATA=false, SEDANG=false, GAGAL=false;
 
 var $=function(id){return document.getElementById(id);};
-var aktif=0,subAktif=[0,0,0,0],q='',tutup={},DAFTAR=[];
+var aktif=0,subAktif=[0,0,0,0],q='',buka={},DAFTAR=[];   // semua kelompok tertutup di awal
 function rp(n){return 'Rp'+n.toLocaleString('id-ID');}
 function angka(n){return n.toLocaleString('id-ID');}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -273,22 +289,25 @@ function gambar(){
     var blok='';
     k.g.forEach(function(g){
       var it=g.it.filter(function(x){return cocok(x.n,kata);}); if(!it.length)return;
-      var kunci=k.k+'|'+g.n, tt=!q&&tutup[kunci];
+      var kunci=k.k+'|'+g.n, terbuka=!!q||!g.n||!!buka[kunci];
       var unit=it.reduce(function(s,x){return s+x.q;},0);
-      if(g.n)blok+='<div class="grup'+(tt?' tutup':'')+'" data-k="'+esc(kunci)+'"><span><span class="pn">▾</span>'+esc(g.n)+'</span><span>'+unit+' unit</span></div>';
-      if(!tt)it.forEach(function(x){
-        var id=DAFTAR.push(x)-1;n++;
-        blok+='<div class="item'+(KER[x.n]?' dikeranjang':'')+'" data-id="'+id+'"><div class="nm">'+tandai(x.n,kata)+stokHtml(x.q)+'</div>'+
-          (x.h?'<div class="hrg">'+rp(x.h)+'</div>':'<div class="hrg tanya">Tanya harga</div>')+tombolTambah(x,id)+'</div>';
-      });
+      if(g.n)blok+='<div class="grup'+(terbuka?' buka':'')+'" data-k="'+esc(kunci)+'"><span class="gn"><b>'+esc(g.n)+'</b></span><span class="gu">'+unit+' unit</span><span class="pn">›</span></div>';
+      if(terbuka){blok+='<div class="gisi">';
+        it.forEach(function(x){
+          var id=DAFTAR.push(x)-1;n++;
+          blok+='<div class="item'+(KER[x.n]?' dikeranjang':'')+'" data-id="'+id+'"><div class="nm">'+tandai(x.n,kata)+stokHtml(x.q)+'</div>'+
+            (x.h?'<div class="hrg">'+rp(x.h)+'</div>':'<div class="hrg tanya">Tanya harga</div>')+tombolTambah(x,id)+'</div>';
+        });
+        blok+='</div>';}
     });
     var jenis=k.g.reduce(function(s,g){return s+g.it.length;},0);
-    if(blok)h+='<section><div class="kat">'+esc(k.k)+(q?'':'<span>'+jenis+' jenis</span>')+'</div>'+blok+'</section>';
+    if(blok)h+='<section><div class="kat"><span class="kj">'+esc(k.k)+'</span>'+(q?'':'<span class="kn">'+jenis+' jenis</span>')+'</div>'+blok+'</section>';
   });
   if(q)h=(n?'<div class="jumlah">'+n+' barang cocok dengan "'+esc(q)+'"</div>':'')+h;
   $('isi').innerHTML=h||(q?'<div class="kosong"><b>Barang tidak ketemu</b>Coba kata lain (misal "8400" atau "nvme 1tb"), atau tanya langsung lewat WhatsApp.</div>'
                           :'<div class="kosong"><b>Stok kosong</b>Belum ada barang ready di bagian ini.</div>');
-  $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;tutup[k]=!tutup[k];gambar();};});
+  $('isi').classList.toggle('cari-aktif',!!q);
+  $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;buka[k]=!buka[k];gambar();};});
   $('isi').querySelectorAll('.item').forEach(function(el){el.onclick=function(){bukaBarang(DAFTAR[+el.dataset.id]);};});
   $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
     var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
@@ -304,7 +323,8 @@ function segarBaris(nama){   // perbarui tombol di daftar tanpa gambar ulang sem
 function gambarBawah(){
   var T=totalKer(), sapa=waLink('Halo PGNet, mau tanya stok barang:\n');
   if(!T.j){$('bawah').innerHTML='<a class="wa" target="_blank" rel="noopener" href="'+sapa+'">💬 Tanya stok via WhatsApp</a>';return;}
-  $('bawah').innerHTML='<a class="wa kecil" target="_blank" rel="noopener" title="Chat WhatsApp" href="'+sapa+'">💬</a>'+
+  // keranjang ada isinya → tombol WA langsung mengirim daftar keranjang
+  $('bawah').innerHTML='<a class="wa kecil" target="_blank" rel="noopener" title="Kirim isi keranjang via WhatsApp" href="'+waLink('Halo PGNet, saya mau pesan:\n\n'+teksKer())+'">💬</a>'+
     '<button class="btnKer" id="btnKer"><div><b>🛒 Keranjang</b><br><span>'+T.j+' jenis · '+T.u+' pcs</span></div><div class="tot">'+rp(T.t)+'</div></button>';
   $('btnKer').onclick=bukaKeranjang;
 }
