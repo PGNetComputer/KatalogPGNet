@@ -152,7 +152,7 @@ section{position:relative}
 .barBagi .bi{flex:1;min-width:0;font-size:12.5px;line-height:1.3}
 .barBagi .bi b{display:block;font-size:14px}
 .barBagi .bi span{opacity:.75;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.barBagi .bb{border:0;background:#fff;color:#1f2b25;font-weight:800;font-size:13.5px;border-radius:10px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.barBagi .bb{border:0;background:#1f9d55;color:#fff;font-weight:800;font-size:13.5px;border-radius:10px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .barBagi .bb svg{width:15px;height:15px}
 .barBagi .bx{border:0;background:transparent;color:#cfe0d6;font-size:18px;width:32px;height:32px;cursor:pointer}
 .opsi{display:grid;gap:8px;margin:12px 0 6px}
@@ -295,11 +295,25 @@ body.gs section>.grup:last-child,body.gs section>.gisi:last-child .item:last-chi
 .h4 .app:has(.kepala.cari-buka) .atas{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:0}
 .h4 .app.mencari .atas{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:0}
 input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.hapusK.yakin{background:var(--merah);color:#fff;border-radius:14px;padding:5px 12px;font-weight:700}
+.item{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.item.disalin{animation:disalin .7s ease}
+@keyframes disalin{0%{background:#cdebd8}100%{}}
+.h4 .infoMini{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.infoMini span{min-width:0}
+.btnSemua{flex:none;align-self:center;width:30px;height:30px;border-radius:15px;border:1.5px solid #1f9d55;background:#fff;color:#1f9d55;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.btnSemua svg{width:15px;height:15px}
+.btnSemua:active{background:#e8f6ee}
+/* ikon kirim-semua di header: rapatkan tab supaya tetap muat */
+.t5 .tab{padding:0 6px;font-size:13px}
+.t5 .tab.on::after{left:6px;right:6px}
+.h4 .judul{gap:5px}
+@media (max-width:390px){.t5 .tab{padding:0 4px;font-size:12.5px}.t5 .tab.on::after{left:4px;right:4px}}
 </style></head>
 <body class="gs h4 t5">
 <div class="app">
   <div class="kepala">
-    <div class="judul"><span class="logo">PG</span><span class="jt">Katalog PGNet</span><div class="tabs" id="tabs"></div><span class="jejak" id="jejak"></span><button class="btnCari" id="btnCari" title="Cari">🔍</button></div>
+    <div class="judul"><span class="logo">PG</span><button class="btnSemua" id="btnSemua" title="Kirim semua stok" aria-label="Kirim semua stok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><span class="jt">Katalog PGNet</span><div class="tabs" id="tabs"></div><span class="jejak" id="jejak"></span><button class="btnCari" id="btnCari" title="Cari">🔍</button></div>
     <div class="info" id="info">Memuat…</div>
     <div class="cari" id="cariBox"><span class="ik">🔍</span><input id="cari" type="search" placeholder="Cari: i5 8400, nvme 512, ddr4 8gb…" autocomplete="off" enterkeyhint="search"><span class="x" id="hapus">✕</span></div>
   </div>
@@ -482,7 +496,7 @@ function gambar(){
     if(blok)h+='<section id="sek-'+slug(k.k)+'"><div class="kat"><span class="kj">'+esc(k.k)+'</span><span class="kanan"><span class="kol"><i class="kq">Qty</i><i class="kh">Harga</i></span>'+(q?'':'<span class="kn">'+jenis+' jenis</span>')+
       '<button class="ibagi kbagi'+(PILIH.k[KAT.indexOf(k)]?' dipilih':'')+'" data-ki="'+KAT.indexOf(k)+'" title="Pilih seluruh kategori untuk dibagikan">'+IKON_BAGI+'</button></span></div>'+blok+'</section>';
   });
-  h='<div class="infoMini">Update '+esc(UPD)+(JAM?' · '+esc(JAM):'')+'</div>'+h;
+  h='<div class="infoMini"><span>Update '+esc(UPD)+(JAM?' · '+esc(JAM):'')+'</span>'+'</div>'+h;
   if(q)h=(n?'<div class="jumlah">'+n+' barang cocok dengan "'+esc(q)+'"</div>':'')+h;
   $('isi').innerHTML=h||(q?'<div class="kosong"><b>Barang tidak ketemu</b>Coba kata lain (misal "8400" atau "nvme 1tb"), atau tanya langsung lewat WhatsApp.</div>'
                           :'<div class="kosong"><b>Stok kosong</b>Belum ada barang ready di bagian ini.</div>');
@@ -490,11 +504,32 @@ function gambar(){
   $('isi').querySelectorAll('.kbagi').forEach(function(b){b.onclick=function(e){e.stopPropagation();pilihKat(+b.dataset.ki);};});
   $('isi').querySelectorAll('.gbagi').forEach(function(b){b.onclick=function(e){e.stopPropagation();pilihGrup(+b.dataset.ki,+b.dataset.gi);};});
   $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;buka[k]=!buka[k];gambar();};});
-  $('isi').querySelectorAll('.item').forEach(function(el){el.onclick=function(){bukaBarang(DAFTAR[+el.dataset.id]);};});
+  $('isi').querySelectorAll('.item').forEach(pasangKetukBarang);
   $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
     var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
     if(n>=x.q){toast('Stok '+x.n+' cuma '+x.q);return;}
     setQty(x.n,n+1);toast('+1 '+x.n);};});
+}
+/* ketuk barang = salin "nama (qty) harga" · tekan lama = buka detail */
+function teksSatu(x){return x.n+' ('+x.q+') '+(x.h?rp(x.h):'tanya harga');}
+function pasangKetukBarang(el){
+  var tahan=null,lama=false,x0=0,y0=0;
+  function batal(){clearTimeout(tahan);tahan=null;}
+  el.addEventListener('pointerdown',function(e){
+    if(e.target.closest('.tb'))return;
+    lama=false;x0=e.clientX;y0=e.clientY;
+    tahan=setTimeout(function(){lama=true;tahan=null;if(navigator.vibrate)navigator.vibrate(15);bukaBarang(DAFTAR[+el.dataset.id]);},500);
+  });
+  el.addEventListener('pointermove',function(e){if(tahan&&(Math.abs(e.clientX-x0)>8||Math.abs(e.clientY-y0)>8))batal();});
+  el.addEventListener('pointerup',batal);el.addEventListener('pointercancel',batal);el.addEventListener('pointerleave',batal);
+  el.addEventListener('contextmenu',function(e){e.preventDefault();});
+  el.onclick=function(e){
+    if(e.target.closest('.tb'))return;
+    if(lama){lama=false;return;}
+    var x=DAFTAR[+el.dataset.id],t=teksSatu(x);
+    salin(t,'✓ Disalin: '+t);
+    el.classList.remove('disalin');void el.offsetWidth;el.classList.add('disalin');
+  };
 }
 function segarBaris(nama){   // perbarui tombol di daftar tanpa gambar ulang semua
   DAFTAR.forEach(function(x,id){ if(x.n!==nama)return;
@@ -556,7 +591,11 @@ function bukaKeranjang(){
     '<button class="tutup" id="kTutup">Lanjut belanja</button></div>');
   $('kTutup').onclick=tutupLembar;
   $('kSalin').onclick=function(){salin(teksKer());};
-  $('kKosong').onclick=function(){if(confirm('Kosongkan semua isi keranjang?')){KER={};simpanKer();gambar();tutupLembar();toast('Keranjang dikosongkan');}};
+  (function(){var btn=$('kKosong'),siap=false,t;   // konfirmasi 2x ketuk, tanpa pop-up
+    btn.onclick=function(){
+      if(!siap){siap=true;btn.classList.add('yakin');btn.textContent='Ketuk lagi untuk hapus';
+        t=setTimeout(function(){siap=false;btn.classList.remove('yakin');btn.textContent='Kosongkan';},3000);return;}
+      clearTimeout(t);KER={};simpanKer();gambar();tutupLembar();toast('Keranjang dikosongkan');};})();
   $('lembar').querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){setQty(b.dataset.m,KER[b.dataset.m]-1);bukaKeranjang();};});
   $('lembar').querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){setQty(b.dataset.p,KER[b.dataset.p]+1);bukaKeranjang();};});
 }
@@ -612,7 +651,7 @@ function gambarBarBagi(){
   if(!L){bar.classList.remove('on');bar.innerHTML='';return;}
   var H=hitungList(L);
   bar.innerHTML='<button class="bx" id="bbX" title="Batal pilih">✕</button><div class="bi"><b>'+L.nama.length+' list dipilih</b><span>'+esc(L.nama.join(' · '))+'</span></div>'+
-    '<button class="bb" id="bbGo">'+SVG_BAGI+' Bagikan</button>';
+    '<button class="bb" id="bbGo">'+SVG_BAGI+' Kirim gambar</button>';
   bar.classList.add('on');
   $('bbX').onclick=kosongkanPilih; $('bbGo').onclick=function(){bagiList(listPilihan());};
 }
@@ -636,46 +675,90 @@ function teksList(L){
 
 /* 2) gambar tabel seperti screenshot sheet (dipecah per 55 baris) */
 function gambarList(L){
-  /* GAYA SHEET: bar judul tipis, huruf kecil rapat, harga biasa, bingkai tabel */
-  var S=2.5,P=10,RH=22,GH=22,BH=26,FH=18,MAX=60,QW=40,GAP=16;
+  /* GAYA SHEET · banyak tabel disusun 2 kolom (seperti tab PGNet Computer di sheet)
+     - tiap kategori = 1 tabel dengan bar judul sendiri
+     - sedikit baris  → 1 kolom ; banyak → 2 kolom berdampingan
+     - tabel yang sangat panjang dipotong jadi "(lanjutan)" supaya kolom seimbang */
+  var S=1.75,P=10,RH=22,GH=22,BH=26,FH=20,GAP=10,QW=40,CG=16;   /* 1.75x: tetap tajam di WA, file kecil */
+  var MAXKOL=40;            // tabel lebih panjang dari ini dipotong "(lanjutan)"
+  var TINGGIKOL=48;         // baris maksimal satu kolom (boleh berisi beberapa tabel)
   var F='"Segoe UI",Roboto,Arial,system-ui,sans-serif';
-  var rows=[];
-  L.sek.forEach(function(s){s.g.forEach(function(g){if(g.n)rows.push({g:g.n});g.it.forEach(function(x){rows.push({x:x});});});});
-  var judul=(L.induk||(L.sek.length===1?L.sek[0].judul:L.judul)).toUpperCase();
-  var uk=document.createElement('canvas').getContext('2d'),maxN=0,maxH=0;
-  rows.forEach(function(r){
-    if(r.x){uk.font='400 12.5px '+F;maxN=Math.max(maxN,uk.measureText(r.x.n).width);maxH=Math.max(maxH,uk.measureText(r.x.h?rp(r.x.h):'Tanya harga').width);}
-    else{uk.font='700 12.5px '+F;maxN=Math.max(maxN,uk.measureText('▶ '+r.g).width);}
-  });
-  uk.font='700 12px '+F;maxN=Math.max(maxN,uk.measureText(judul).width);
-  var W=Math.round(Math.max(380,Math.min(640,P+maxN+GAP+QW+GAP+Math.max(maxH,40)+P)));
-  var KH=W-P, KQ=KH-Math.max(maxH,40)-GAP-QW/2;
+  var uk=document.createElement('canvas').getContext('2d');
   function potong(c,t,m){if(c.measureText(t).width<=m)return t;while(t.length&&c.measureText(t+'…').width>m)t=t.slice(0,-1);return t+'…';}
-  var bag=[];for(var i=0;i<rows.length;i+=MAX)bag.push(rows.slice(i,i+MAX));
-  return bag.map(function(p,pi){
-    var H=BH+p.reduce(function(s,r){return s+(r.g?GH:RH);},0)+FH;
-    var cv=document.createElement('canvas');cv.width=Math.round(W*S);cv.height=Math.round(H*S);var c=cv.getContext('2d');c.scale(S,S);
-    c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';
-    // bar judul tipis (seperti header tabel di sheet)
-    c.fillStyle='#2f5d4a';c.fillRect(0,0,W,BH);c.fillStyle='#fff';c.font='700 12px '+F;
-    c.fillText(potong(c,judul+(bag.length>1?' ('+(pi+1)+'/'+bag.length+')':''),KQ-QW/2-GAP-P),P,BH/2);
-    c.font='600 11.5px '+F;c.textAlign='center';c.fillText('Qty',KQ,BH/2);c.textAlign='right';c.fillText('Harga',KH,BH/2);c.textAlign='left';
-    var y=BH,z=0;
-    p.forEach(function(r){
-      if(r.g){c.fillStyle='#fff';c.fillRect(0,y,W,GH);c.fillStyle='#1f1f1f';c.font='700 12.5px '+F;c.fillText('▶ '+r.g,P,y+GH/2);
-        c.fillStyle='#e6e6e6';c.fillRect(0,y+GH-1,W,1);y+=GH;z=0;return;}
-      c.fillStyle=(z++%2)?'#f6f8f7':'#ffffff';c.fillRect(0,y,W,RH);
-      c.fillStyle='#ececec';c.fillRect(0,y+RH-1,W,1);
-      c.fillStyle='#2b2b2b';c.font='400 12.5px '+F;c.fillText(potong(c,r.x.n,KQ-QW/2-GAP-P+4),P,y+RH/2);
+  // 1) susun blok per kategori
+  var blok=[];
+  L.sek.forEach(function(s){
+    var rows=[];s.g.forEach(function(g){if(g.n)rows.push({g:g.n});g.it.forEach(function(x){rows.push({x:x});});});
+    var judul=(L.induk&&L.sek.length===1?L.induk:s.judul).toUpperCase();
+    for(var i=0;i<rows.length;i+=MAXKOL){
+      var pot=rows.slice(i,i+MAXKOL);
+      if(i>0&&!pot[0].g){ // beri judul kelompok lagi di potongan lanjutan
+        for(var j=i-1;j>=0;j--)if(rows[j].g){pot.unshift({g:rows[j].g+' (lanj.)'});break;}}
+      blok.push({j:judul+(i>0?' (lanjutan)':''),rows:pot});
+    }
+  });
+  // 2) lebar satu tabel (ikut nama terpanjang)
+  var maxN=0,maxH=40;
+  blok.forEach(function(b){
+    uk.font='700 12px '+F;maxN=Math.max(maxN,uk.measureText(b.j).width-60);
+    b.rows.forEach(function(r){
+      if(r.x){uk.font='400 12.5px '+F;maxN=Math.max(maxN,uk.measureText(r.x.n).width);maxH=Math.max(maxH,uk.measureText(r.x.h?rp(r.x.h):'Tanya harga').width);}
+      else{uk.font='700 12.5px '+F;maxN=Math.max(maxN,uk.measureText('▶ '+r.g).width);}
+    });
+  });
+  var TW=Math.round(Math.max(300,Math.min(560,P+maxN+CG+QW+CG+maxH+P)));
+  function tinggi(b){return BH+b.rows.reduce(function(s,r){return s+(r.g?GH:RH);},0);}
+  var total=blok.reduce(function(s,b){return s+b.rows.length;},0);
+  var duaKolom=total>30&&blok.length>1;
+  // 3) bagi ke halaman (gambar) & kolom, urutan tetap
+  var halaman=[],kini=null,kol=0,hKol=0,batas=TINGGIKOL*RH+BH*2+GAP*2;
+  blok.forEach(function(b){
+    var t=tinggi(b);
+    if(!kini){kini={k:[[],[]]};halaman.push(kini);kol=0;hKol=0;}
+    if(hKol>0&&hKol+GAP+t>batas){
+      if(duaKolom&&kol===0){kol=1;hKol=0;}
+      else{kini={k:[[],[]]};halaman.push(kini);kol=0;hKol=0;}
+    }
+    kini.k[kol].push(b);hKol+=(hKol?GAP:0)+t;
+  });
+  // seimbangkan: kalau kolom kanan kosong tapi kiri berisi >1 blok & panjang, pindahkan separuh
+  halaman.forEach(function(h){
+    if(duaKolom&&!h.k[1].length&&h.k[0].length>1){
+      var tot=h.k[0].reduce(function(s,b){return s+tinggi(b);},0),acc=0,i=0;
+      while(i<h.k[0].length-1&&acc+tinggi(h.k[0][i])<=tot/2+RH*3){acc+=tinggi(h.k[0][i]);i++;}
+      if(i===0)i=1;
+      h.k[1]=h.k[0].splice(i);
+    }
+  });
+  function gambarBlok(c,b,x0,y0){
+    var KH=x0+TW-P,KQ=KH-maxH-CG-QW/2,y=y0;
+    c.fillStyle='#2f5d4a';c.fillRect(x0,y,TW,BH);c.fillStyle='#fff';c.font='700 12px '+F;
+    c.fillText(potong(c,b.j,KQ-QW/2-CG-x0-P),x0+P,y+BH/2);
+    c.font='600 11.5px '+F;c.textAlign='center';c.fillText('Qty',KQ,y+BH/2);c.textAlign='right';c.fillText('Harga',KH,y+BH/2);c.textAlign='left';
+    y+=BH;var z=0;
+    b.rows.forEach(function(r){
+      if(r.g){c.fillStyle='#fff';c.fillRect(x0,y,TW,GH);c.fillStyle='#1f1f1f';c.font='700 12.5px '+F;c.fillText('▶ '+r.g,x0+P,y+GH/2);
+        c.fillStyle='#e6e6e6';c.fillRect(x0,y+GH-1,TW,1);y+=GH;z=0;return;}
+      c.fillStyle=(z++%2)?'#f6f8f7':'#ffffff';c.fillRect(x0,y,TW,RH);
+      c.fillStyle='#ececec';c.fillRect(x0,y+RH-1,TW,1);
+      c.fillStyle='#2b2b2b';c.font='400 12.5px '+F;c.fillText(potong(c,r.x.n,KQ-QW/2-CG-x0-P+4),x0+P,y+RH/2);
       c.textAlign='center';c.fillText(String(r.x.q),KQ,y+RH/2);
       c.textAlign='right';c.fillStyle=r.x.h?'#2b2b2b':'#999';c.fillText(r.x.h?rp(r.x.h):'Tanya harga',KH,y+RH/2);c.textAlign='left';
       y+=RH;
     });
-    // catatan kecil di bawah
-    c.fillStyle='#fafafa';c.fillRect(0,y,W,FH);c.fillStyle='#8a8a8a';c.font='400 10px '+F;
-    c.fillText('PGNet Computer',P,y+FH/2);c.textAlign='right';c.fillText('Update '+UPD.replace(/ ·.*WIB/,function(m){return m;}),KH,y+FH/2);c.textAlign='left';
-    // bingkai tabel
-    c.strokeStyle='#2f5d4a';c.lineWidth=1;c.strokeRect(0.5,0.5,W-1,H-1);
+    c.strokeStyle='#2f5d4a';c.lineWidth=1;c.strokeRect(x0+.5,y0+.5,TW-1,y-y0-1);
+  }
+  return halaman.map(function(h,hi){
+    var nk=h.k[1].length?2:1;
+    var hk=h.k.map(function(k){return k.reduce(function(s,b,i){return s+(i?GAP:0)+tinggi(b);},0);});
+    var W=GAP+nk*TW+(nk-1)*GAP+GAP, H=GAP+Math.max(hk[0],hk[1])+GAP+FH;
+    var cv=document.createElement('canvas');cv.width=Math.round(W*S);cv.height=Math.round(H*S);
+    var c=cv.getContext('2d');c.scale(S,S);c.textBaseline='middle';
+    c.fillStyle='#eef1ef';c.fillRect(0,0,W,H);
+    for(var k=0;k<nk;k++){var y=GAP,x=GAP+k*(TW+GAP);h.k[k].forEach(function(b){gambarBlok(c,b,x,y);y+=tinggi(b)+GAP;});}
+    var yf=H-FH;c.fillStyle='#8a8a8a';c.font='400 10.5px '+F;
+    c.fillText('PGNet Computer'+(L.label?'  ·  '+L.label:'')+(halaman.length>1?'  ·  '+(hi+1)+'/'+halaman.length:''),GAP,yf+FH/2-3);
+    c.textAlign='right';c.fillText('Update '+UPD,W-GAP,yf+FH/2-3);c.textAlign='left';
     return cv;
   });
 }
@@ -692,31 +775,43 @@ function kirimGambar(L,kanvas){
   });
 }
 
-function bagiList(L){
-  var H=hitungList(L);
-  bukaLembar('<div class="pegangan"></div><div class="gulir"><div class="kc">Bagikan list'+(L.induk?' · '+esc(L.induk):'')+'</div><h3>'+esc(L.judul)+'</h3>'+
-    '<div class="stok">'+(L.nama.length>1?esc(L.nama.join(' · '))+'<br>':'')+H.j+' jenis · '+H.u+' unit</div>'+
-    '<div class="opsi">'+
-      '<button class="op" data-o="2"><span class="oi">🖼️</span><b>Gambar list (seperti SS)</b><small>Tabel rapi seperti screenshot sheet, siap dikirim</small></button>'+
-      '<button class="op" data-o="1"><span class="oi">📋</span><b>Salin teks list</b><small>Paste di chat WA — ringan & bisa dicari customer</small></button>'+
-      '<button class="op" data-o="3"><span class="oi">🔗</span><b>Salin link</b><small>Customer buka link → langsung ke list ini (sudah terbuka)</small></button>'+
-    '</div><div class="hasilBagi" id="hasilBagi"></div><button class="tutup" id="bTutup">Tutup</button>'+
-    '<button class="tutup" id="bSelesai" style="color:var(--merah);margin-top:0">Selesai & hapus pilihan</button></div>');
+/* KIRIM GAMBAR: langsung buka menu kirim HP (WhatsApp dll), tanpa lembar pilihan */
+/* JPG kualitas 0.75: ±3x lebih kecil dari PNG → cepat dikirim (WA mengompres ulang juga) */
+function dataGambar(cv){return cv.toDataURL('image/jpeg',0.75);}
+function jadiFile(d,nama){
+  var bin=atob(d.split(',')[1]),arr=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new File([arr],nama,{type:'image/jpeg'});
+}
+function kirimGambar2(data,nama,judul,selesai){
+  var files=data.map(function(d,i){return jadiFile(d,nama+(data.length>1?'_'+(i+1):'')+'.jpg');});
+  if(navigator.canShare&&navigator.canShare({files:files})){
+    navigator.share({files:files}).then(function(){if(selesai)selesai();toast('✓ Gambar terkirim');}).catch(function(){});
+    return;
+  }
+  // HP/browser tidak mendukung kirim langsung → tampilkan gambarnya saja
+  bukaLembar('<div class="pegangan"></div><div class="gulir"><div class="kc">Kirim gambar</div><h3>'+esc(judul)+'</h3>'+
+    '<div class="ket">Browser ini belum bisa kirim gambar langsung. Tekan lama gambar di bawah → Bagikan / Salin. (Paling lancar dibuka lewat Chrome di HP.)</div>'+
+    '<div class="hasilBagi">'+data.map(function(d){return '<img src="'+d+'" alt="">';}).join('')+'</div>'+
+    '<button class="tutup" id="bTutup">Tutup</button></div>');
   $('bTutup').onclick=tutupLembar;
-  $('bSelesai').onclick=function(){kosongkanPilih();tutupLembar();};
-  $('lembar').querySelectorAll('.op').forEach(function(b){b.onclick=function(){
-    $('lembar').querySelectorAll('.op').forEach(function(x){x.classList.toggle('on',x===b);});
-    var o=b.dataset.o,hs=$('hasilBagi');
-    if(o==='1'){var t=teksList(L);salin(t,'✓ List disalin — tinggal paste di WhatsApp');
-      hs.innerHTML='<div class="ket2">Sudah disalin. Contoh isinya:</div><pre>'+esc(t)+'</pre>';}
-    if(o==='2'){var kv=gambarList(L);
-      hs.innerHTML='<div class="ket2">'+(kv.length>1?kv.length+' gambar (list panjang dipecah supaya tetap jelas di WA)':'1 gambar')+'</div>'+
-        kv.map(function(cv){return '<img src="'+cv.toDataURL('image/png')+'" alt="">';}).join('')+
-        '<button class="btnHijau" id="bKirimG" style="width:100%">📤 Kirim / simpan gambar</button>';
-      $('bKirimG').onclick=function(){kirimGambar(L,kv);};}
-    if(o==='3'){var l=linkList(L);salin(l,'✓ Link disalin');
-      hs.innerHTML='<div class="ket2">Link disalin:</div><pre>'+esc(l)+'</pre><a class="btnGaris" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent('List '+L.judul+' PGNet:\n'+l)+'">💬 Kirim link lewat WhatsApp</a>';}
-  };});
+}
+function bagiList(L){
+  if(!L)return;
+  var data=gambarList(L).map(dataGambar);
+  kirimGambar2(data,'PGNet_'+L.hash.replace(/[\/,]/g,'_').slice(0,60),L.judul,kosongkanPilih);
+}
+/* KIRIM SEMUA STOK: 1 set gambar per kategori utama (Processor, RAM, SSD, Others Parts) */
+function kirimSemua(){
+  var data=[];
+  TAB.forEach(function(nama,t){
+    var sek=KAT.filter(function(k){return k.t===t;}).map(function(k){return {judul:k.k,g:k.g,utuh:true,hash:slug(k.k)};});
+    if(!sek.length)return;
+    var L={sek:sek,nama:[nama],judul:nama,induk:'',hash:slug(nama),label:nama};
+    gambarList(L).forEach(function(cv){data.push(dataGambar(cv));});
+  });
+  if(!data.length){toast('Belum ada data');return;}
+  kirimGambar2(data,'PGNet_Semua_Stok','Semua stok · '+data.length+' gambar');
 }
 
 /* buka dari link #kategori , #kategori/kelompok , bisa beberapa dipisah koma → langsung terbuka */
@@ -763,6 +858,7 @@ document.querySelector('.judul').addEventListener('click',function(e){
   var app=document.querySelector('.app');
   if(app.classList.contains('susut')&&!e.target.closest('#btnCari')){e.stopPropagation();e.preventDefault();app.classList.remove('susut');kunciGulir=Date.now()+400;}
 },true);
+$('btnSemua').onclick=function(e){e.stopPropagation();kirimSemua();};
 function tutupCari(){document.querySelector('.kepala').classList.remove('cari-buka');document.querySelector('.app').classList.remove('mencari');}
 $('btnCari').onclick=function(){var k=document.querySelector('.kepala');
   if(k.classList.contains('cari-buka')&&!$('cari').value){tutupCari();return;}
