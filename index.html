@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2f5d4a">
+<meta name="description" content="Daftar harga & stok ready PGNet Computer — processor, RAM, SSD & part komputer. Update otomatis.">
+<meta property="og:title" content="Katalog PGNet Computer">
+<meta property="og:description" content="Harga & stok ready terbaru: Processor, RAM, SSD & Others Parts.">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="ikon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Katalog PGNet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Katalog PGNet</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--latar:#f5f3ee;--kartu:#fffefb;--garis:#e5e1d8;--garis2:#efebe3;--tinta:#2b2a27;--abu:#6b675f;--abu2:#9a958b;--hijau:#2f5d4a;--hijau2:#e4eee8;--wa:#1f9d55;--oranye:#b3541e;--merah:#b3412f}
+html,body{margin:0;height:100%}
+body{background:#e9e7e1;color:var(--tinta);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button{font-family:inherit}
+.app{height:100dvh;background:var(--latar);display:flex;flex-direction:column;position:relative;overflow:hidden;max-width:520px;margin:0 auto}
+@media(min-width:600px){body{display:flex;align-items:center;justify-content:center;padding:20px}
+ .app{width:390px;height:min(820px,calc(100vh - 40px));border:8px solid #2e2c29;border-radius:30px;box-shadow:0 20px 50px rgba(0,0,0,.25)}}
+.kepala{background:var(--hijau);color:#fff;padding:12px 14px 11px;flex:none}
+.judul{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.logo{background:#fff;color:var(--hijau);border-radius:7px;font-size:11px;padding:2px 6px;font-weight:900}
+.info{font-size:11.5px;opacity:.82;margin-top:2px}
+.cari{margin-top:10px;background:#fff;border-radius:11px;display:flex;align-items:center;gap:6px;padding:0 10px}
+.cari input{border:0;outline:0;flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 0;background:transparent;color:var(--tinta)}
+.cari .ik{color:var(--abu2)}
+.cari .x{color:var(--abu2);cursor:pointer;padding:6px;display:none}
+.cari.ada .x{display:block}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:9px 10px;background:var(--kartu);border-bottom:1px solid var(--garis);flex:none;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--garis);border-radius:18px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--abu);background:#fff;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--hijau);border-color:var(--hijau);color:#fff}
+.atas{flex:none;background:var(--kartu);border-bottom:1px solid var(--garis)}
+.tabs{display:flex;gap:6px;padding:9px 10px}
+.tab{flex:1 1 auto;border:1px solid var(--garis);border-radius:18px;padding:7px 10px;font-size:13px;font-weight:700;color:var(--abu);background:#fff;cursor:pointer;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis}
+.tab.on{background:var(--hijau);border-color:var(--hijau);color:#fff}
+.tabs.cari-mode .tab{opacity:.55}
+.sub{display:flex;gap:3px;margin:0 10px 9px;padding:3px;background:#f1eee7;border-radius:12px}
+.sub:empty{display:none}
+.sc{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:7px 4px;font-size:12.5px;font-weight:700;color:var(--abu);background:transparent;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.sc.on{background:#fff;color:var(--hijau);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.infoCari{padding:0 12px 9px;font-size:12px;color:var(--abu)}
+.isi{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
+.kat{padding:14px 14px 7px;font-size:12px;font-weight:800;color:var(--hijau);letter-spacing:.3px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline;background:var(--latar)}
+.kat span{font-weight:600;color:var(--abu2);text-transform:none;letter-spacing:0}
+.grup{position:sticky;top:0;background:#efe9df;font-size:12.5px;font-weight:800;color:#5d5953;padding:7px 14px;z-index:1;display:flex;justify-content:space-between;cursor:pointer;user-select:none}
+.grup .pn{display:inline-block;transition:transform .15s;margin-right:4px}
+.grup.tutup .pn{transform:rotate(-90deg)}
+.item{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 14px;border-bottom:1px solid var(--garis2);background:var(--kartu);cursor:pointer}
+.item:active{background:#f1ede5}
+.item.dikeranjang{background:#f3f8f4}
+.item .nm{flex:1;min-width:0;font-size:14px}
+.item .nm mark{background:#fff0b3;color:inherit;border-radius:2px}
+.item .hrg{font-weight:800;white-space:nowrap;font-size:14.5px}
+.item .hrg.tanya{font-weight:600;color:var(--abu2);font-size:12.5px}
+.tb{flex:none;min-width:34px;height:34px;border-radius:17px;border:1.5px solid var(--hijau);background:#fff;color:var(--hijau);font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0 8px}
+.tb.isi-k{background:var(--hijau);color:#fff;font-size:13.5px}
+.tb:disabled{border-color:var(--garis);color:var(--abu2);cursor:default}
+.stok{font-size:11.5px;color:var(--abu2);margin-top:1px}
+.stok.sedikit{color:var(--oranye);font-weight:700}
+.kosong{padding:40px 20px;text-align:center;color:var(--abu2);font-size:14px}
+.kosong b{display:block;color:var(--tinta);margin-bottom:4px}
+.jumlah{padding:8px 14px;font-size:12px;color:var(--abu)}
+.bawah{flex:none;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--kartu);border-top:1px solid var(--garis);display:flex;gap:8px}
+.wa{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--wa);color:#fff;border-radius:11px;padding:12px;font-weight:800;font-size:14px;text-decoration:none;border:0;width:100%;cursor:pointer}
+.wa.kecil{width:48px;flex:none;padding:12px 0;font-size:17px}
+.btnKer{flex:1;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--hijau);color:#fff;border:0;border-radius:11px;padding:10px 14px;cursor:pointer;text-align:left}
+.btnKer b{font-size:14px}.btnKer span{font-size:12px;opacity:.85}
+.btnKer .tot{font-weight:800;font-size:14.5px;white-space:nowrap}
+.naik{position:absolute;right:14px;bottom:80px;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--hijau);border:1px solid var(--garis);font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;cursor:pointer;z-index:3}
+.naik.on{display:block}
+.tirai{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:8;display:none}
+.tirai.on{display:block}
+.lembar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:8px 16px calc(16px + env(safe-area-inset-bottom));z-index:9;transform:translateY(105%);transition:transform .22s ease;max-height:88%;display:flex;flex-direction:column}
+.lembar.on{transform:none}
+.lembar .gulir{overflow-y:auto;flex:1;min-height:0}
+.pegangan{width:40px;height:4px;border-radius:2px;background:#d6d1c7;margin:4px auto 12px;flex:none}
+.lembar .kc{font-size:11.5px;font-weight:700;color:var(--hijau);text-transform:uppercase;letter-spacing:.3px}
+.lembar h3{margin:4px 0 6px;font-size:17px;line-height:1.3}
+.lembar .hb{font-size:22px;font-weight:800;margin:6px 0 2px}
+.lembar .hb.tanya{font-size:15px;color:var(--abu)}
+.lembar .ket{font-size:12px;color:var(--abu);margin:12px 0;background:#f5f3ee;border-radius:10px;padding:9px 11px}
+.lembar .tutup{background:none;border:0;color:var(--abu);font-size:14px;width:100%;padding:10px;margin-top:2px;cursor:pointer}
+.stepper{display:flex;align-items:center;gap:0;border:1.5px solid var(--garis);border-radius:12px;overflow:hidden;flex:none}
+.stepper button{width:40px;height:40px;border:0;background:#fff;font-size:20px;font-weight:700;color:var(--hijau);cursor:pointer}
+.stepper button:disabled{color:#cfcac0;cursor:default}
+.stepper .n{min-width:36px;text-align:center;font-weight:800;font-size:16px}
+.stepper.kcl button{width:32px;height:32px;font-size:17px}
+.stepper.kcl .n{min-width:28px;font-size:14px}
+.baris-aksi{display:flex;gap:10px;align-items:center;margin-top:4px}
+.btnHijau{flex:1;background:var(--hijau);color:#fff;border:0;border-radius:11px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
+.btnGaris{width:100%;background:#fff;color:var(--wa);border:1.5px solid var(--wa);border-radius:11px;padding:11px;font-weight:800;font-size:14px;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.hapusK{background:none;border:0;color:var(--merah);font-size:13px;padding:8px 0 0;cursor:pointer}
+.kjudul{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex:none}
+.kjudul h3{margin:0}
+.kjudul .hapusK{padding:0}
+.kgrup{font-size:11.5px;font-weight:800;color:var(--hijau);text-transform:uppercase;letter-spacing:.3px;margin:12px 0 2px}
+.kb{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--garis2)}
+.kb .nm{flex:1;min-width:0;font-size:13.5px}
+.kb .rinci{font-size:12px;color:var(--abu);margin-top:1px}
+.kb .rinci b{color:var(--tinta)}
+.ktotal{display:flex;justify-content:space-between;font-weight:800;font-size:16px;padding:12px 0 4px;flex:none}
+.pratinjau{margin:6px 0 10px;flex:none}
+.pratinjau summary{font-size:12.5px;color:var(--abu);cursor:pointer;padding:4px 0}
+.pratinjau pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;background:#f3f1ec;border-radius:10px;padding:10px;margin:6px 0 0;max-height:180px;overflow:auto}
+.kaki{flex:none}
+.toast{position:absolute;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:#2b2a27;color:#fff;font-size:13px;padding:9px 14px;border-radius:20px;opacity:0;transition:all .2s;pointer-events:none;z-index:20;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.offline{color:#ffd9a8;font-weight:700}
+.kosong .kecil{font-size:11.5px;color:var(--abu2);margin-top:10px}
+.putar{width:28px;height:28px;border:3px solid var(--garis);border-top-color:var(--hijau);border-radius:50%;margin:0 auto 12px;animation:putar .8s linear infinite}
+@keyframes putar{to{transform:rotate(360deg)}}
+</style></head>
+<body>
+<div class="app">
+  <div class="kepala">
+    <div class="judul"><span class="logo">PG</span>Katalog PGNet</div>
+    <div class="info" id="info">Memuat…</div>
+    <div class="cari" id="cariBox"><span class="ik">🔍</span><input id="cari" type="search" placeholder="Cari: i5 8400, nvme 512, ddr4 8gb…" autocomplete="off" enterkeyhint="search"><span class="x" id="hapus">✕</span></div>
+  </div>
+  <div class="atas"><div class="tabs" id="tabs"></div><div class="sub" id="sub"></div></div>
+  <div class="isi" id="isi"></div>
+  <button class="naik" id="naik" title="Ke atas">↑</button>
+  <div class="bawah" id="bawah"></div>
+  <div class="toast" id="toast"></div>
+  <div class="tirai" id="tirai"></div>
+  <div class="lembar" id="lembar"></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+/* ============================================================
+   KATALOG PGNET — tampilan HP
+   Data dari Apps Script (tab Database), disimpan di browser,
+   dicek ulang tiap 5 menit.
+   ============================================================ */
+/* Link Apps Script ada di file config.js (APPS_SCRIPT_URL) */
+var APPS_SCRIPT_URL = window.APPS_SCRIPT_URL || '';
+
+var UMUR_DATA = 5*60*1000;              // 5 menit
+var LS_DATA = 'pgnet_katalog_v1';       // simpanan data katalog
+var LS_KER  = 'pgnet_keranjang_v1';     // simpanan keranjang
+
+var WA='', JAM='', UPD='', TS=0, TAB=['Processor','RAM','SSD','Others Parts'], SUB=[[],[],[],[]];
+var KAT=[], PETA={}, ADA_DATA=false, SEDANG=false, GAGAL=false;
+
+var $=function(id){return document.getElementById(id);};
+var aktif=0,subAktif=[0,0,0,0],q='',tutup={},DAFTAR=[];
+function rp(n){return 'Rp'+n.toLocaleString('id-ID');}
+function angka(n){return n.toLocaleString('id-ID');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function norm(s){return s.toLowerCase().replace(/[-_/.,()+]/g,' ').replace(/\s+/g,' ').trim();}
+function cocok(nama,kata){
+  if(!kata.length)return true;
+  var n=norm(nama),rapat=n.replace(/ /g,'');
+  return kata.every(function(w){return n.indexOf(w)>=0||rapat.indexOf(w)>=0;});
+}
+function tandai(nama,kata){
+  var h=esc(nama); if(!kata.length)return h;
+  kata.forEach(function(w){ if(w.length<2)return;
+    var re=new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+    h=h.replace(re,'<mark>$1</mark>');});
+  return h;
+}
+function stokHtml(q){return q<=2?'<div class="stok sedikit">sisa '+q+'</div>':'<div class="stok">stok '+q+'</div>';}
+function waLink(teks){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(teks);}
+var tt;function toast(t){var el=$('toast');el.textContent=t;el.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){el.classList.remove('on');},1800);}
+function lsBaca(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function lsTulis(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+/* ===================== DATA ===================== */
+function pakaiData(d){
+  WA=d.wa||WA; JAM=d.jam||JAM; UPD=d.upd||''; TS=d.ts||Date.now();
+  if(d.tab)TAB=d.tab; if(d.sub)SUB=d.sub;
+  KAT=(d.kat||[]).map(function(k){
+    return {k:k.j,t:k.t,s:k.s,g:k.g.map(function(g){
+      return {n:g[0],it:g[1].map(function(x){return {n:x[0],q:x[1]||0,h:x[2]||0,kat:k.j,t:k.t,s:k.s};})};})};
+  });
+  PETA={}; KAT.forEach(function(k){k.g.forEach(function(g){g.it.forEach(function(x){PETA[x.n]=x;});});});
+  Object.keys(KER).forEach(function(n){ var x=PETA[n];        // barang terjual habis / stok turun
+    if(!x||!x.q)delete KER[n]; else if(KER[n]>x.q)KER[n]=x.q; });
+  lsTulis(LS_KER,KER);
+  subAktif=subAktif.map(function(v,i){return v<subAda(i).length?v:0;});
+  ADA_DATA=true;
+  var gulir=$('isi').scrollTop;
+  gambar(); gambarBawah(); tulisInfo();
+  $('isi').scrollTop=gulir;                                  // posisi baca tidak loncat saat data diperbarui
+}
+function tulisInfo(){
+  $('info').innerHTML=(UPD?'Update '+esc(UPD):'Memuat…')+(JAM?' · '+esc(JAM):'')+
+    (GAGAL&&ADA_DATA?' · <span class="offline">data terakhir, belum tersambung</span>':'');
+}
+function ambilData(){
+  if(SEDANG)return; SEDANG=true;
+  if(!/^https:\/\/script\.google\.com\//.test(APPS_SCRIPT_URL)){SEDANG=false;gagal('Link Apps Script belum diisi di config.js');return;}
+  var ctrl=window.AbortController?new AbortController():null, batas=setTimeout(function(){if(ctrl)ctrl.abort();},20000);
+  fetch(APPS_SCRIPT_URL+'?format=json&t='+Date.now(),{signal:ctrl?ctrl.signal:undefined,cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('Server '+r.status);return r.json();})
+    .then(function(d){
+      clearTimeout(batas); SEDANG=false;
+      if(!d||!d.kat)throw new Error('Data tidak dikenali');
+      GAGAL=false; d.diambil=DIAMBIL=Date.now(); lsTulis(LS_DATA,d); pakaiData(d);
+    })
+    .catch(function(e){ clearTimeout(batas); SEDANG=false; gagal(e&&e.name==='AbortError'?'Koneksi terlalu lama':(e&&e.message)); });
+}
+function gagal(pesan){
+  GAGAL=true;
+  if(ADA_DATA){tulisInfo();return;}
+  $('isi').innerHTML='<div class="kosong"><b>Katalog belum bisa dimuat</b>Periksa sinyal internet lalu coba lagi.'+
+    '<br><button class="btnHijau" style="margin-top:14px;padding:10px 18px" onclick="this.disabled=true;ambilData()">Coba lagi</button>'+
+    (pesan?'<div class="kecil">'+esc(pesan)+'</div>':'')+'</div>';
+}
+var DIAMBIL=0;   // kapan terakhir berhasil ambil (dipakai juga kalau penyimpanan browser diblokir)
+function perluSegar(){var d=lsBaca(LS_DATA),w=Math.max(DIAMBIL,(d&&d.diambil)||0);return Date.now()-w>UMUR_DATA;}
+
+/* ===================== KERANJANG ===================== */
+var KER=lsBaca(LS_KER)||{};
+function simpanKer(){lsTulis(LS_KER,KER); gambarBawah();}
+function setQty(n,v){var x=PETA[n];if(!x)return;v=Math.max(0,Math.min(v,x.q));if(v)KER[n]=v;else delete KER[n];simpanKer();segarBaris(n);}
+function isiKer(){return Object.keys(KER).filter(function(n){return PETA[n];}).map(function(n){return {x:PETA[n],q:KER[n]};});}
+function totalKer(){var t=0,u=0,ada0=false,it=isiKer();it.forEach(function(k){u+=k.q;if(k.x.h)t+=k.x.h*k.q;else ada0=true;});return {t:t,u:u,j:it.length,ada0:ada0};}
+
+/* dikelompokkan per jenis (RAM Laptop, SSD SATA, …), urut tab lalu nama jenis */
+function kerTerkelompok(){
+  var g={};isiKer().forEach(function(k){var key=k.x.t+'|'+k.x.s;(g[key]=g[key]||{t:k.x.t,s:k.x.s,it:[]}).it.push(k);});
+  return Object.keys(g).map(function(k){return g[k];})
+    .sort(function(a,b){return a.t-b.t||(a.s<b.s?-1:a.s>b.s?1:0);})
+    .map(function(x){x.it.sort(function(a,b){return a.x.n<b.x.n?-1:a.x.n>b.x.n?1:0;});return x;});
+}
+function teksKer(){
+  var bl=kerTerkelompok().map(function(g){return g.it.map(function(k){
+    var x=k.x;
+    return x.n+' ('+k.q+') '+(x.h?angka(x.h):'harga menyusul')+(x.h&&k.q>1?' : '+angka(x.h*k.q):'');
+  }).join('\n');});
+  var T=totalKer();
+  return bl.join('\n\n')+'\n____________ +\n*Total: '+rp(T.t)+'*'+(T.ada0?'\n(belum termasuk barang yang harganya menyusul)':'');
+}
+function salin(t){
+  function cadangan(){var a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.top='0';a.style.opacity='0';document.body.appendChild(a);a.select();a.setSelectionRange(0,a.value.length);
+    var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(a);
+    toast(ok?'✓ Daftar disalin — tinggal paste di WhatsApp':'Gagal menyalin, buka "Lihat teks" lalu salin manual');}
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(function(){toast('✓ Daftar disalin — tinggal paste di WhatsApp');},cadangan);
+  else cadangan();
+}
+
+/* ===================== TAMPILAN ===================== */
+function subAda(t){return (SUB[t]||[]).filter(function(n){return KAT.some(function(k){return k.t===t&&k.s===n;});});}
+function gambarTab(){
+  $('tabs').className='tabs'+(q?' cari-mode':'');
+  $('tabs').innerHTML=TAB.map(function(n,i){return '<button class="tab'+(!q&&i===aktif?' on':'')+'" data-t="'+i+'">'+esc(n)+'</button>';}).join('');
+  $('tabs').querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){
+    aktif=+b.dataset.t;q='';$('cari').value='';$('cariBox').classList.remove('ada');gambar();$('isi').scrollTop=0;};});
+  var sub=subAda(aktif);
+  $('sub').innerHTML=(q||sub.length<2)?'':sub.map(function(n,i){return '<button class="sc'+(i===subAktif[aktif]?' on':'')+'" data-s="'+i+'">'+esc(n)+'</button>';}).join('');
+  $('sub').querySelectorAll('[data-s]').forEach(function(c){c.onclick=function(){subAktif[aktif]=+c.dataset.s;gambar();$('isi').scrollTop=0;};});
+}
+function tombolTambah(x,id){
+  var n=KER[x.n]||0;
+  return '<button class="tb'+(n?' isi-k':'')+'" data-add="'+id+'" title="Tambah ke keranjang">'+(n?n+' ✓':'+')+'</button>';
+}
+function gambar(){
+  if(!ADA_DATA)return;
+  gambarTab();
+  var kata=q?norm(q).split(' '):[],h='',n=0;DAFTAR=[];
+  var subN=subAda(aktif)[subAktif[aktif]];
+  (q?KAT:KAT.filter(function(k){return k.t===aktif&&k.s===subN;})).forEach(function(k){
+    var blok='';
+    k.g.forEach(function(g){
+      var it=g.it.filter(function(x){return cocok(x.n,kata);}); if(!it.length)return;
+      var kunci=k.k+'|'+g.n, tt=!q&&tutup[kunci];
+      var unit=it.reduce(function(s,x){return s+x.q;},0);
+      if(g.n)blok+='<div class="grup'+(tt?' tutup':'')+'" data-k="'+esc(kunci)+'"><span><span class="pn">▾</span>'+esc(g.n)+'</span><span>'+unit+' unit</span></div>';
+      if(!tt)it.forEach(function(x){
+        var id=DAFTAR.push(x)-1;n++;
+        blok+='<div class="item'+(KER[x.n]?' dikeranjang':'')+'" data-id="'+id+'"><div class="nm">'+tandai(x.n,kata)+stokHtml(x.q)+'</div>'+
+          (x.h?'<div class="hrg">'+rp(x.h)+'</div>':'<div class="hrg tanya">Tanya harga</div>')+tombolTambah(x,id)+'</div>';
+      });
+    });
+    var jenis=k.g.reduce(function(s,g){return s+g.it.length;},0);
+    if(blok)h+='<section><div class="kat">'+esc(k.k)+(q?'':'<span>'+jenis+' jenis</span>')+'</div>'+blok+'</section>';
+  });
+  if(q)h=(n?'<div class="jumlah">'+n+' barang cocok dengan "'+esc(q)+'"</div>':'')+h;
+  $('isi').innerHTML=h||(q?'<div class="kosong"><b>Barang tidak ketemu</b>Coba kata lain (misal "8400" atau "nvme 1tb"), atau tanya langsung lewat WhatsApp.</div>'
+                          :'<div class="kosong"><b>Stok kosong</b>Belum ada barang ready di bagian ini.</div>');
+  $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;tutup[k]=!tutup[k];gambar();};});
+  $('isi').querySelectorAll('.item').forEach(function(el){el.onclick=function(){bukaBarang(DAFTAR[+el.dataset.id]);};});
+  $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
+    var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
+    if(n>=x.q){toast('Stok '+x.n+' cuma '+x.q);return;}
+    setQty(x.n,n+1);toast('+1 '+x.n);};});
+}
+function segarBaris(nama){   // perbarui tombol di daftar tanpa gambar ulang semua
+  DAFTAR.forEach(function(x,id){ if(x.n!==nama)return;
+    var row=$('isi').querySelector('.item[data-id="'+id+'"]'); if(!row)return;
+    row.classList.toggle('dikeranjang',!!KER[nama]);
+    var b=row.querySelector('.tb'),n=KER[nama]||0; b.className='tb'+(n?' isi-k':''); b.textContent=n?n+' ✓':'+'; });
+}
+function gambarBawah(){
+  var T=totalKer(), sapa=waLink('Halo PGNet, mau tanya stok barang:\n');
+  if(!T.j){$('bawah').innerHTML='<a class="wa" target="_blank" rel="noopener" href="'+sapa+'">💬 Tanya stok via WhatsApp</a>';return;}
+  $('bawah').innerHTML='<a class="wa kecil" target="_blank" rel="noopener" title="Chat WhatsApp" href="'+sapa+'">💬</a>'+
+    '<button class="btnKer" id="btnKer"><div><b>🛒 Keranjang</b><br><span>'+T.j+' jenis · '+T.u+' pcs</span></div><div class="tot">'+rp(T.t)+'</div></button>';
+  $('btnKer').onclick=bukaKeranjang;
+}
+
+/* ===================== LEMBAR BAWAH ===================== */
+function bukaLembar(html){$('lembar').innerHTML=html;$('tirai').classList.add('on');$('lembar').classList.add('on');}
+function tutupLembar(){$('tirai').classList.remove('on');$('lembar').classList.remove('on');}
+$('tirai').onclick=tutupLembar;
+
+function bukaBarang(x){
+  var ada=KER[x.n]||0, v=ada||1;
+  var teks='Halo PGNet, saya mau tanya barang ini:\n- '+x.n+(x.h?' ('+rp(x.h)+')':'')+'\n\nMasih ready?';
+  function isi(){
+    bukaLembar('<div class="pegangan"></div><div class="gulir"><div class="kc">'+esc(x.kat)+'</div><h3>'+esc(x.n)+'</h3>'+
+      (x.h?'<div class="hb">'+rp(x.h)+'</div>':'<div class="hb tanya">Harga belum tercantum — tanyakan ke admin</div>')+stokHtml(x.q)+
+      '<div class="ket">Harga & stok bisa berubah sewaktu-waktu. Tanyakan ke admin sebelum transfer ya.</div>'+
+      '<div class="baris-aksi"><div class="stepper"><button id="sMin"'+(v<=1?' disabled':'')+'>−</button><span class="n">'+v+'</span><button id="sPlus"'+(v>=x.q?' disabled':'')+'>+</button></div>'+
+        '<button class="btnHijau" id="sOk">'+(ada?'Simpan jumlah':'🛒 Tambah ke keranjang')+(x.h&&v>1?' · '+rp(x.h*v):'')+'</button></div>'+
+        (ada?'<button class="hapusK" id="sHapus">Hapus dari keranjang</button>':'')+
+      '<a class="btnGaris" target="_blank" rel="noopener" href="'+waLink(teks)+'">💬 Tanya barang ini via WhatsApp</a>'+
+      '<button class="tutup" id="sTutup">Tutup</button></div>');
+    $('sTutup').onclick=tutupLembar;
+    $('sMin').onclick=function(){v--;isi();};
+    $('sPlus').onclick=function(){v++;isi();};
+    $('sOk').onclick=function(){setQty(x.n,v);tutupLembar();toast(ada?'Jumlah diperbarui':'✓ Masuk keranjang');};
+    if($('sHapus'))$('sHapus').onclick=function(){setQty(x.n,0);tutupLembar();toast('Dihapus dari keranjang');};
+  }
+  isi();
+}
+
+function bukaKeranjang(){
+  var T=totalKer();
+  if(!T.j){tutupLembar();return;}
+  var daftar=kerTerkelompok().map(function(g){
+    return '<div class="kgrup">'+esc(g.s)+'</div>'+g.it.map(function(k){var x=k.x;
+      return '<div class="kb"><div class="nm">'+esc(x.n)+'<div class="rinci">'+(x.h?rp(x.h)+(k.q>1?' × '+k.q+' = <b>'+rp(x.h*k.q)+'</b>':''):'harga menyusul')+'</div></div>'+
+        '<div class="stepper kcl"><button data-m="'+esc(x.n)+'">'+(k.q<=1?'🗑':'−')+'</button><span class="n">'+k.q+'</span><button data-p="'+esc(x.n)+'"'+(k.q>=x.q?' disabled':'')+'>+</button></div></div>';
+    }).join('');}).join('');
+  bukaLembar('<div class="pegangan"></div>'+
+    '<div class="kjudul"><h3>🛒 Keranjang</h3><button class="hapusK" id="kKosong">Kosongkan</button></div>'+
+    '<div class="gulir">'+daftar+'</div>'+
+    '<div class="kaki"><div class="ktotal"><span>Total '+T.u+' pcs</span><span>'+rp(T.t)+'</span></div>'+
+    (T.ada0?'<div class="stok sedikit" style="margin-bottom:6px">Ada barang yang harganya belum tercantum (tidak ikut dijumlah)</div>':'')+
+    '<details class="pratinjau"><summary>Lihat teks yang akan disalin</summary><pre>'+esc(teksKer())+'</pre></details>'+
+    '<button class="btnHijau" id="kSalin" style="width:100%">📋 Salin daftar</button>'+
+    '<a class="btnGaris" target="_blank" rel="noopener" href="'+waLink('Halo PGNet, saya mau pesan:\n\n'+teksKer())+'">💬 Kirim ke WhatsApp PGNet</a>'+
+    '<button class="tutup" id="kTutup">Lanjut belanja</button></div>');
+  $('kTutup').onclick=tutupLembar;
+  $('kSalin').onclick=function(){salin(teksKer());};
+  $('kKosong').onclick=function(){if(confirm('Kosongkan semua isi keranjang?')){KER={};simpanKer();gambar();tutupLembar();toast('Keranjang dikosongkan');}};
+  $('lembar').querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){setQty(b.dataset.m,KER[b.dataset.m]-1);bukaKeranjang();};});
+  $('lembar').querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){setQty(b.dataset.p,KER[b.dataset.p]+1);bukaKeranjang();};});
+}
+
+/* ===================== CARI & GULIR ===================== */
+var tc;
+$('cari').oninput=function(){
+  $('cariBox').classList.toggle('ada',!!this.value);
+  clearTimeout(tc);var v=this.value;tc=setTimeout(function(){q=v.trim();gambar();$('isi').scrollTop=0;},120);
+};
+$('hapus').onclick=function(){$('cari').value='';q='';$('cariBox').classList.remove('ada');gambar();$('cari').focus();};
+$('isi').onscroll=function(){$('naik').classList.toggle('on',this.scrollTop>600);};
+$('naik').onclick=function(){$('isi').scrollTo({top:0,behavior:'smooth'});};
+
+/* ===================== MULAI ===================== */
+(function(){
+  var simpan=lsBaca(LS_DATA);
+  if(simpan&&simpan.kat)pakaiData(simpan);            // tampil seketika dari simpanan browser
+  else{ $('isi').innerHTML='<div class="kosong"><div class="putar"></div>Memuat katalog…</div>'; tulisInfo(); gambarBawah(); }
+  if(perluSegar())ambilData();                         // ambil data baru kalau simpanan > 5 menit
+  setInterval(function(){ if(!document.hidden&&perluSegar())ambilData(); },60*1000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&perluSegar())ambilData(); });
+  // PWA: simpan tampilan di HP supaya cepat dibuka & bisa dipasang seperti aplikasi
+  if('serviceWorker' in navigator && location.protocol==='https:'){
+    window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+  }
+})();
+</script>
+</body></html>
