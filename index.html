@@ -346,6 +346,12 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 .qbar .qb:disabled{border-color:var(--garis);color:#c9c4ba}
 .qbar b{min-width:20px;text-align:center;font-size:15px}
 .qbar .qs{min-width:92px;text-align:right;font-weight:800;font-size:13.5px;color:var(--hijau)}
+/* jumlah langsung di samping harga */
+.qin{flex:none;display:flex;align-items:center;gap:4px;border:1.5px solid var(--hijau);border-radius:17px;padding:1px;background:#fff}
+.qin .qb{width:30px;height:28px;border-radius:14px;border:0;background:transparent;color:var(--hijau);font-size:17px;font-weight:800;line-height:1;cursor:pointer;padding:0;font-family:inherit}
+.qin .qb:disabled{color:#c9c4ba}
+.qin b{min-width:14px;text-align:center;font-size:14px;color:var(--hijau)}
+body.gs .qin .qb{width:24px;height:22px;font-size:14px}
 </style></head>
 <body class="gs h4 t5">
 <div class="app">
@@ -505,7 +511,8 @@ function gambarTab(){
 }
 var SVG_BAGI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
 var IKON_BAGI='<span class="ik">'+SVG_BAGI+'</span><svg class="cek" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-function barJumlah(x,id){
+function barJumlah(x,id){ return ''; }   /* jumlah sekarang langsung di samping harga (lihat tombolTambah) */
+function barJumlahLama(x,id){
   var n=KER[x.n]||0; if(!n)return '';
   return '<div class="qbar" data-id="'+id+'"><span class="ql">Jumlah</span>'+
     '<button class="qb" data-d="-1" aria-label="Kurangi">'+(n<=1?'🗑':'−')+'</button><b>'+n+'</b>'+
@@ -515,7 +522,10 @@ function barJumlah(x,id){
 function gambarTetap(){var st=$('isi').scrollTop;gambar();$('isi').scrollTop=st;}
 function tombolTambah(x,id){
   var n=KER[x.n]||0;
-  return '<button class="tb'+(n?' isi-k':'')+'" data-add="'+id+'" title="Tambah ke keranjang">'+(n?n+' ✓':'+')+'</button>';
+  if(!n)return '<button class="tb" data-add="'+id+'" title="Tambah ke keranjang">+</button>';
+  // sudah di keranjang: − jumlah + langsung di samping harga (tanpa baris tambahan)
+  return '<span class="qin" data-id="'+id+'"><button class="qb" data-d="-1" aria-label="Kurangi">'+(n<=1?'🗑':'−')+'</button><b>'+n+'</b>'+
+    '<button class="qb" data-d="1" aria-label="Tambah"'+(n>=x.q?' disabled':'')+'>+</button></span>';
 }
 function gambar(){
   if(!ADA_DATA)return;
@@ -550,14 +560,16 @@ function gambar(){
   $('isi').querySelectorAll('.gbagi').forEach(function(b){b.onclick=function(e){e.stopPropagation();pilihGrup(+b.dataset.ki,+b.dataset.gi);};});
   $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;buka[k]=!buka[k];gambar();};});
   $('isi').querySelectorAll('.item').forEach(pasangKetukBarang);
-  $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
-    var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
-    if(n){setQty(x.n,0);gambarTetap();toast('✕ Batal: '+x.n);return;}       // sudah dipilih → ketuk lagi = batal
-    setQty(x.n,1);gambarTetap();toast('✓ Masuk keranjang');};});
-  $('isi').querySelectorAll('.qbar .qb').forEach(function(b){b.onclick=function(e){e.stopPropagation();
-    var x=DAFTAR[+b.parentNode.dataset.id],n=KER[x.n]||0,v=n+(+b.dataset.d);
-    if(v>x.q){toast('Stok cuma '+x.q);return;}
-    setQty(x.n,v);gambarTetap();if(v<=0)toast('✕ Batal: '+x.n);};});
+  if(!$('isi')._kerPasang){ $('isi')._kerPasang=1;        // tombol + dan − jumlah: satu pendengar untuk semua baris
+    $('isi').addEventListener('click',function(e){
+      var add=e.target.closest('[data-add]'), qb=e.target.closest('.qin .qb');
+      if(add){e.stopPropagation();var x=DAFTAR[+add.dataset.add];setQty(x.n,1);toast('✓ Masuk keranjang');return;}
+      if(qb){e.stopPropagation();if(qb.disabled)return;
+        var x2=DAFTAR[+qb.parentNode.dataset.id],n=KER[x2.n]||0,v=n+(+qb.dataset.d);
+        if(v>x2.q){toast('Stok cuma '+x2.q);return;}
+        setQty(x2.n,v);if(v<=0)toast('✕ Batal: '+x2.n);}
+    },true);
+  }
 }
 /* ketuk barang = salin "nama (qty) harga" · tekan lama = buka detail */
 function teksSatu(x){return x.n+' ('+x.q+') '+(x.h?rp(x.h):'tanya harga');}
@@ -565,7 +577,7 @@ function pasangKetukBarang(el){
   var tahan=null,lama=false,x0=0,y0=0;
   function batal(){clearTimeout(tahan);tahan=null;}
   el.addEventListener('pointerdown',function(e){
-    if(e.target.closest('.tb')||e.target.closest('.qbar'))return;
+    if(e.target.closest('.tb')||e.target.closest('.qin')||e.target.closest('.qbar'))return;
     lama=false;x0=e.clientX;y0=e.clientY;
     tahan=setTimeout(function(){lama=true;tahan=null;if(navigator.vibrate)navigator.vibrate(15);bukaBarang(DAFTAR[+el.dataset.id]);},500);
   });
@@ -573,7 +585,7 @@ function pasangKetukBarang(el){
   el.addEventListener('pointerup',batal);el.addEventListener('pointercancel',batal);el.addEventListener('pointerleave',batal);
   el.addEventListener('contextmenu',function(e){e.preventDefault();});
   el.onclick=function(e){
-    if(e.target.closest('.tb')||e.target.closest('.qbar'))return;
+    if(e.target.closest('.tb')||e.target.closest('.qin')||e.target.closest('.qbar'))return;
     if(lama){lama=false;return;}
     var x=DAFTAR[+el.dataset.id],t=teksSatu(x);
     salin(t,'✓ Disalin: '+t);
@@ -584,7 +596,7 @@ function segarBaris(nama){   // perbarui tombol di daftar tanpa gambar ulang sem
   DAFTAR.forEach(function(x,id){ if(x.n!==nama)return;
     var row=$('isi').querySelector('.item[data-id="'+id+'"]'); if(!row)return;
     row.classList.toggle('dikeranjang',!!KER[nama]);
-    var b=row.querySelector('.tb'),n=KER[nama]||0; b.className='tb'+(n?' isi-k':''); b.textContent=n?n+' ✓':'+'; });
+    var b=row.querySelector('.tb, .qin'); if(b)b.outerHTML=tombolTambah(x,id); });
 }
 var SVG_WA='<svg class="waLogo" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M16 3.2C8.9 3.2 3.2 8.8 3.2 15.8c0 2.4.7 4.7 1.9 6.7L3.1 28.9l6.6-2c1.9 1.1 4.1 1.6 6.3 1.6 7.1 0 12.8-5.6 12.8-12.7S23.1 3.2 16 3.2z"/><path fill="#25D366" d="M11.7 9.5c-.3-.6-.6-.6-.9-.6h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.3s1.4 3.8 1.6 4.1c.2.3 2.8 4.4 6.8 6 3.3 1.3 4 1 4.7.9.7-.1 2.3-1 2.7-1.9.3-.9.3-1.7.2-1.9-.1-.2-.4-.3-.8-.5l-2.6-1.3c-.3-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.3-.4.3-.8.1-.4-.2-1.7-.6-3.2-2-1.2-1.1-2-2.4-2.2-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7l-1.3-2.7z"/></svg>';
 function gambarBawah(){
