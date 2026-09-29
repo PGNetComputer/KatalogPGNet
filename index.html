@@ -338,6 +338,14 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 @media (max-width:599px){
   .app{position:fixed;top:0;left:0;right:0;bottom:0;height:auto;max-width:none;margin:0}
 }
+/* pengatur jumlah langsung di bawah barang yang dipilih */
+.item{flex-wrap:wrap}
+.qbar{flex-basis:100%;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:6px 0 2px}
+.qbar .ql{font-size:12px;color:var(--abu);margin-right:auto}
+.qbar .qb{width:34px;height:30px;border-radius:9px;border:1.5px solid var(--hijau);background:#fff;color:var(--hijau);font-size:18px;font-weight:800;line-height:1;cursor:pointer;padding:0}
+.qbar .qb:disabled{border-color:var(--garis);color:#c9c4ba}
+.qbar b{min-width:20px;text-align:center;font-size:15px}
+.qbar .qs{min-width:92px;text-align:right;font-weight:800;font-size:13.5px;color:var(--hijau)}
 </style></head>
 <body class="gs h4 t5">
 <div class="app">
@@ -497,6 +505,14 @@ function gambarTab(){
 }
 var SVG_BAGI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
 var IKON_BAGI='<span class="ik">'+SVG_BAGI+'</span><svg class="cek" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function barJumlah(x,id){
+  var n=KER[x.n]||0; if(!n)return '';
+  return '<div class="qbar" data-id="'+id+'"><span class="ql">Jumlah</span>'+
+    '<button class="qb" data-d="-1" aria-label="Kurangi">'+(n<=1?'🗑':'−')+'</button><b>'+n+'</b>'+
+    '<button class="qb" data-d="1" aria-label="Tambah"'+(n>=x.q?' disabled':'')+'>+</button>'+
+    '<span class="qs">'+(x.h?rp(x.h*n):'')+'</span></div>';
+}
+function gambarTetap(){var st=$('isi').scrollTop;gambar();$('isi').scrollTop=st;}
 function tombolTambah(x,id){
   var n=KER[x.n]||0;
   return '<button class="tb'+(n?' isi-k':'')+'" data-add="'+id+'" title="Tambah ke keranjang">'+(n?n+' ✓':'+')+'</button>';
@@ -517,7 +533,7 @@ function gambar(){
         it.forEach(function(x){
           var id=DAFTAR.push(x)-1;n++;
           blok+='<div class="item'+(KER[x.n]?' dikeranjang':'')+'" data-id="'+id+'"><div class="nm">'+tandai(x.n,kata)+stokHtml(x.q)+'</div><div class="qt'+(x.q<=2?' sedikit':'')+'">'+x.q+'</div>'+
-            (x.h?'<div class="hrg">'+rp(x.h)+'</div>':'<div class="hrg tanya">Tanya harga</div>')+tombolTambah(x,id)+'</div>';
+            (x.h?'<div class="hrg">'+rp(x.h)+'</div>':'<div class="hrg tanya">Tanya harga</div>')+tombolTambah(x,id)+barJumlah(x,id)+'</div>';
         });
         blok+='</div>';}
     });
@@ -536,8 +552,12 @@ function gambar(){
   $('isi').querySelectorAll('.item').forEach(pasangKetukBarang);
   $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
     var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
-    if(n){setQty(x.n,0);toast('✕ Batal: '+x.n);return;}       // sudah dipilih → ketuk lagi = batal
-    setQty(x.n,1);toast('✓ Masuk keranjang · tekan lama untuk atur jumlah');};});
+    if(n){setQty(x.n,0);gambarTetap();toast('✕ Batal: '+x.n);return;}       // sudah dipilih → ketuk lagi = batal
+    setQty(x.n,1);gambarTetap();toast('✓ Masuk keranjang');};});
+  $('isi').querySelectorAll('.qbar .qb').forEach(function(b){b.onclick=function(e){e.stopPropagation();
+    var x=DAFTAR[+b.parentNode.dataset.id],n=KER[x.n]||0,v=n+(+b.dataset.d);
+    if(v>x.q){toast('Stok cuma '+x.q);return;}
+    setQty(x.n,v);gambarTetap();if(v<=0)toast('✕ Batal: '+x.n);};});
 }
 /* ketuk barang = salin "nama (qty) harga" · tekan lama = buka detail */
 function teksSatu(x){return x.n+' ('+x.q+') '+(x.h?rp(x.h):'tanya harga');}
@@ -545,7 +565,7 @@ function pasangKetukBarang(el){
   var tahan=null,lama=false,x0=0,y0=0;
   function batal(){clearTimeout(tahan);tahan=null;}
   el.addEventListener('pointerdown',function(e){
-    if(e.target.closest('.tb'))return;
+    if(e.target.closest('.tb')||e.target.closest('.qbar'))return;
     lama=false;x0=e.clientX;y0=e.clientY;
     tahan=setTimeout(function(){lama=true;tahan=null;if(navigator.vibrate)navigator.vibrate(15);bukaBarang(DAFTAR[+el.dataset.id]);},500);
   });
@@ -553,7 +573,7 @@ function pasangKetukBarang(el){
   el.addEventListener('pointerup',batal);el.addEventListener('pointercancel',batal);el.addEventListener('pointerleave',batal);
   el.addEventListener('contextmenu',function(e){e.preventDefault();});
   el.onclick=function(e){
-    if(e.target.closest('.tb'))return;
+    if(e.target.closest('.tb')||e.target.closest('.qbar'))return;
     if(lama){lama=false;return;}
     var x=DAFTAR[+el.dataset.id],t=teksSatu(x);
     salin(t,'✓ Disalin: '+t);
