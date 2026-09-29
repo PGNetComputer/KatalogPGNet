@@ -132,6 +132,18 @@ section{position:relative}
 .kosong .kecil{font-size:11.5px;color:var(--abu2);margin-top:10px}
 .putar{width:28px;height:28px;border:3px solid var(--garis);border-top-color:var(--hijau);border-radius:50%;margin:0 auto 12px;animation:putar .8s linear infinite}
 @keyframes putar{to{transform:rotate(360deg)}}
+.kat .kanan{display:flex;align-items:center;gap:6px;flex:none}
+.kbagi{border:0;background:#fff;color:var(--hijau);font-weight:800;font-size:12px;border-radius:14px;padding:4px 10px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.opsi{display:grid;gap:8px;margin:12px 0 6px}
+.op{display:grid;grid-template-columns:40px 1fr;grid-template-rows:auto auto;column-gap:10px;text-align:left;border:1.5px solid var(--garis);background:#fff;border-radius:14px;padding:11px 12px;cursor:pointer}
+.op .oi{grid-row:1/3;font-size:24px;display:flex;align-items:center;justify-content:center;background:var(--hijau2);border-radius:10px}
+.op b{font-size:14.5px;color:var(--tinta)}.op small{font-size:12px;color:var(--abu)}
+.op.on{border-color:var(--hijau);background:#f3f8f4}
+.hasilBagi img{width:100%;border-radius:10px;border:1px solid var(--garis);display:block;margin:8px 0}
+.hasilBagi pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;background:#f3f1ec;border-radius:10px;padding:10px;margin:8px 0;max-height:240px;overflow:auto}
+.hasilBagi .ket2{font-size:12px;color:var(--abu);margin:6px 0}
+section.sorot .kat{animation:sorot 1.6s ease 2}
+@keyframes sorot{50%{background:#1f9d55}}
 </style></head>
 <body>
 <div class="app">
@@ -203,10 +215,11 @@ function pakaiData(d){
     if(!x||!x.q)delete KER[n]; else if(KER[n]>x.q)KER[n]=x.q; });
   lsTulis(LS_KER,KER);
   subAktif=subAktif.map(function(v,i){return v<subAda(i).length?v:0;});
-  ADA_DATA=true;
+  var pertama=!ADA_DATA; ADA_DATA=true;
   var gulir=$('isi').scrollTop;
   gambar(); gambarBawah(); tulisInfo();
-  $('isi').scrollTop=gulir;                                  // posisi baca tidak loncat saat data diperbarui
+  $('isi').scrollTop=gulir;
+  if(pertama)bukaDariLink();                                  // posisi baca tidak loncat saat data diperbarui
 }
 function tulisInfo(){
   $('info').innerHTML=(UPD?'Update '+esc(UPD):'Memuat…')+(JAM?' · '+esc(JAM):'')+
@@ -257,11 +270,12 @@ function teksKer(){
   var T=totalKer();
   return bl.join('\n\n')+'\n____________ +\n*Total: '+rp(T.t)+'*'+(T.ada0?'\n(belum termasuk barang yang harganya menyusul)':'');
 }
-function salin(t){
+function salin(t,pesan){
+  pesan=pesan||'✓ Daftar disalin — tinggal paste di WhatsApp';
   function cadangan(){var a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.top='0';a.style.opacity='0';document.body.appendChild(a);a.select();a.setSelectionRange(0,a.value.length);
     var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(a);
-    toast(ok?'✓ Daftar disalin — tinggal paste di WhatsApp':'Gagal menyalin, buka "Lihat teks" lalu salin manual');}
-  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(function(){toast('✓ Daftar disalin — tinggal paste di WhatsApp');},cadangan);
+    toast(ok?pesan:'Gagal menyalin, buka "Lihat teks" lalu salin manual');}
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(function(){toast(pesan);},cadangan);
   else cadangan();
 }
 
@@ -301,12 +315,14 @@ function gambar(){
         blok+='</div>';}
     });
     var jenis=k.g.reduce(function(s,g){return s+g.it.length;},0);
-    if(blok)h+='<section><div class="kat"><span class="kj">'+esc(k.k)+'</span>'+(q?'':'<span class="kn">'+jenis+' jenis</span>')+'</div>'+blok+'</section>';
+    if(blok)h+='<section id="sek-'+slug(k.k)+'"><div class="kat"><span class="kj">'+esc(k.k)+'</span><span class="kanan">'+(q?'':'<span class="kn">'+jenis+' jenis</span>')+
+      '<button class="kbagi" data-ki="'+KAT.indexOf(k)+'" title="Bagikan list kategori ini">⤴ Bagikan</button></span></div>'+blok+'</section>';
   });
   if(q)h=(n?'<div class="jumlah">'+n+' barang cocok dengan "'+esc(q)+'"</div>':'')+h;
   $('isi').innerHTML=h||(q?'<div class="kosong"><b>Barang tidak ketemu</b>Coba kata lain (misal "8400" atau "nvme 1tb"), atau tanya langsung lewat WhatsApp.</div>'
                           :'<div class="kosong"><b>Stok kosong</b>Belum ada barang ready di bagian ini.</div>');
   $('isi').classList.toggle('cari-aktif',!!q);
+  $('isi').querySelectorAll('.kbagi').forEach(function(b){b.onclick=function(e){e.stopPropagation();bagiKat(KAT[+b.dataset.ki]);};});
   $('isi').querySelectorAll('.grup').forEach(function(el){el.onclick=function(){if(q)return;var k=el.dataset.k;buka[k]=!buka[k];gambar();};});
   $('isi').querySelectorAll('.item').forEach(function(el){el.onclick=function(){bukaBarang(DAFTAR[+el.dataset.id]);};});
   $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
@@ -378,6 +394,109 @@ function bukaKeranjang(){
   $('lembar').querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){setQty(b.dataset.m,KER[b.dataset.m]-1);bukaKeranjang();};});
   $('lembar').querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){setQty(b.dataset.p,KER[b.dataset.p]+1);bukaKeranjang();};});
 }
+
+/* ===================== BAGIKAN LIST KATEGORI ===================== */
+function slug(s){return norm(s).replace(/[^a-z0-9 ]/g,'').trim().replace(/ +/g,'-');}
+/* alamat katalog yang ditulis di gambar & link (bisa diatur lewat variabel LINK_KATALOG) */
+function alamatKatalog(){return (window.LINK_KATALOG||(location.host+location.pathname)).replace(/^https?:\/\//,'').replace(/index\.html$/,'');}
+function linkKat(k){return 'https://'+alamatKatalog()+'#'+slug(k.k);}
+function waTampil(){var w='0'+String(WA).replace(/^62/,'');return w.replace(/^(\d{4})(\d{4})(\d+)$/,'$1-$2-$3');}
+function hitungKat(k){var j=0,u=0;k.g.forEach(function(g){g.it.forEach(function(x){j++;u+=x.q;});});return {j:j,u:u};}
+
+/* 1) teks untuk WhatsApp */
+function teksKat(k){
+  var t='*'+k.k+'*\nPGNet Computer · Update '+UPD+'\n';
+  k.g.forEach(function(g){
+    t+='\n'+(g.n?'▶ *'+g.n+'*\n':'');
+    g.it.forEach(function(x){t+=x.n+' ('+x.q+') '+(x.h?angka(x.h):'tanya harga')+'\n';});
+  });
+  return t+'\nKatalog lengkap & harga terbaru:\n'+linkKat(k);
+}
+
+/* 2) gambar tabel seperti screenshot sheet (dipecah per 55 baris) */
+function gambarKat(k){
+  var S=2,W=720,P=16,RH=30,GH=30,HH=84,CH=28,FH=40,MAX=55,KQ=W-170,KH=W-P;
+  var rows=[];k.g.forEach(function(g){if(g.n)rows.push({g:g.n});g.it.forEach(function(x){rows.push({x:x});});});
+  var bag=[];for(var i=0;i<rows.length;i+=MAX)bag.push(rows.slice(i,i+MAX));
+  var F='system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif';
+  function potong(c,t,maks){if(c.measureText(t).width<=maks)return t;while(t.length&&c.measureText(t+'…').width>maks)t=t.slice(0,-1);return t+'…';}
+  return bag.map(function(p,pi){
+    var H=HH+CH+p.reduce(function(s,r){return s+(r.g?GH:RH);},0)+FH;
+    var cv=document.createElement('canvas');cv.width=W*S;cv.height=H*S;var c=cv.getContext('2d');c.scale(S,S);
+    c.fillStyle='#fff';c.fillRect(0,0,W,H);
+    c.fillStyle='#2f5d4a';c.fillRect(0,0,W,HH);
+    c.fillStyle='#fff';c.beginPath();if(c.roundRect)c.roundRect(P,11,26,17,5);else c.rect(P,11,26,17);c.fill();c.fillStyle='#2f5d4a';c.font='900 10.5px '+F;c.fillText('PG',P+5.5,23.5);c.fillStyle='#fff';c.font='800 13px '+F;c.fillText('PGNet Computer',P+33,24);
+    c.font='900 22px '+F;c.fillText(k.k+(bag.length>1?'  ('+(pi+1)+'/'+bag.length+')':''),P,52);
+    c.font='500 12.5px '+F;c.globalAlpha=.85;c.fillText('Update '+UPD+' · harga & stok dapat berubah',P,72);c.globalAlpha=1;
+    var y=HH;c.fillStyle='#e4dccd';c.fillRect(0,y,W,CH);
+    c.fillStyle='#5d5953';c.font='800 12.5px '+F;c.textBaseline='middle';
+    c.fillText('Nama Barang',P,y+CH/2);c.textAlign='center';c.fillText('Qty',KQ,y+CH/2);c.textAlign='right';c.fillText('Harga',KH,y+CH/2);c.textAlign='left';
+    y+=CH;var z=0;
+    p.forEach(function(r){
+      if(r.g){c.fillStyle='#efe9df';c.fillRect(0,y,W,GH);c.fillStyle='#2f5d4a';c.font='800 14px '+F;c.fillText('▶ '+r.g,P,y+GH/2);y+=GH;z=0;return;}
+      c.fillStyle=(z++%2)?'#faf8f4':'#ffffff';c.fillRect(0,y,W,RH);
+      c.fillStyle='#efebe3';c.fillRect(0,y+RH-1,W,1);
+      c.fillStyle='#2b2a27';c.font='500 14px '+F;c.fillText(potong(c,r.x.n,KQ-P-40),P,y+RH/2);
+      c.textAlign='center';c.fillStyle=r.x.q<=2?'#b3541e':'#2b2a27';c.font=(r.x.q<=2?'800 ':'600 ')+'14px '+F;c.fillText(String(r.x.q),KQ,y+RH/2);
+      c.textAlign='right';c.fillStyle=r.x.h?'#2b2a27':'#9a958b';c.font=(r.x.h?'800 ':'600 ')+'14px '+F;c.fillText(r.x.h?rp(r.x.h):'Tanya harga',KH,y+RH/2);c.textAlign='left';
+      y+=RH;
+    });
+    c.fillStyle='#f5f3ee';c.fillRect(0,y,W,FH);c.fillStyle='#2f5d4a';c.font='700 12.5px '+F;
+    c.fillText('Katalog lengkap: '+alamatKatalog(),P,y+FH/2);
+    c.textAlign='right';c.fillText('WA '+waTampil(),KH,y+FH/2);c.textAlign='left';
+    return cv;
+  });
+}
+function kirimGambar(k,kanvas){
+  var nama='PGNet_'+slug(k.k);
+  Promise.all(kanvas.map(function(cv,i){return new Promise(function(ok){cv.toBlob(function(b){ok(new File([b],nama+(kanvas.length>1?'_'+(i+1):'')+'.png',{type:'image/png'}));},'image/png');});}))
+  .then(function(files){
+    if(navigator.canShare&&navigator.canShare({files:files})){
+      navigator.share({files:files,title:k.k}).catch(function(){});
+    }else{
+      files.forEach(function(f,i){setTimeout(function(){var a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();},i*400);});
+      toast('Gambar disimpan ke folder Download');
+    }
+  });
+}
+
+function bagiKat(k){
+  var H=hitungKat(k);
+  bukaLembar('<div class="pegangan"></div><div class="gulir"><div class="kc">Bagikan list</div><h3>'+esc(k.k)+'</h3>'+
+    '<div class="stok">'+H.j+' jenis · '+H.u+' unit</div>'+
+    '<div class="opsi">'+
+      '<button class="op" data-o="1"><span class="oi">📋</span><b>Salin teks list</b><small>Paste di chat WA — ringan & bisa dicari customer</small></button>'+
+      '<button class="op" data-o="2"><span class="oi">🖼️</span><b>Gambar list (seperti SS)</b><small>Tabel rapi seperti screenshot sheet, siap dikirim</small></button>'+
+      '<button class="op" data-o="3"><span class="oi">🔗</span><b>Salin link kategori</b><small>Customer buka link → langsung ke list ini (semua terbuka)</small></button>'+
+    '</div><div class="hasilBagi" id="hasilBagi"></div><button class="tutup" id="bTutup">Tutup</button></div>');
+  $('bTutup').onclick=tutupLembar;
+  $('lembar').querySelectorAll('.op').forEach(function(b){b.onclick=function(){
+    $('lembar').querySelectorAll('.op').forEach(function(x){x.classList.toggle('on',x===b);});
+    var o=b.dataset.o,hs=$('hasilBagi');
+    if(o==='1'){var t=teksKat(k);salin(t,'✓ List disalin — tinggal paste di WhatsApp');
+      hs.innerHTML='<div class="ket2">Sudah disalin. Contoh isinya:</div><pre>'+esc(t)+'</pre>';}
+    if(o==='2'){var kv=gambarKat(k);
+      hs.innerHTML='<div class="ket2">'+(kv.length>1?kv.length+' gambar (list panjang dipecah supaya tetap jelas di WA)':'1 gambar')+'</div>'+
+        kv.map(function(cv){return '<img src="'+cv.toDataURL('image/png')+'" alt="">';}).join('')+
+        '<button class="btnHijau" id="bKirimG" style="width:100%">📤 Kirim / simpan gambar</button>';
+      $('bKirimG').onclick=function(){kirimGambar(k,kv);};}
+    if(o==='3'){var l=linkKat(k);salin(l,'✓ Link disalin');
+      hs.innerHTML='<div class="ket2">Link disalin:</div><pre>'+esc(l)+'</pre><a class="btnGaris" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent('List '+k.k+' PGNet:\n'+l)+'">💬 Kirim link lewat WhatsApp</a>';}
+  };});
+}
+
+/* buka dari link #nama-kategori → langsung ke kategori itu, semua kelompok terbuka */
+function bukaDariLink(){
+  var h=decodeURIComponent((location.hash||'').slice(1));if(!h||!ADA_DATA)return;
+  var k=KAT.filter(function(x){return slug(x.k)===h;})[0];if(!k)return;
+  q='';$('cari').value='';$('cariBox').classList.remove('ada');
+  aktif=k.t;subAktif[k.t]=Math.max(0,subAda(k.t).indexOf(k.s));
+  k.g.forEach(function(g){buka[k.k+'|'+g.n]=true;});
+  gambar();
+  var el=document.getElementById('sek-'+slug(k.k));
+  if(el){$('isi').scrollTop=el.offsetTop;el.classList.add('sorot');}
+}
+window.addEventListener('hashchange',bukaDariLink);
 
 /* ===================== CARI & GULIR ===================== */
 var tc;
