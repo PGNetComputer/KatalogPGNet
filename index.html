@@ -332,6 +332,12 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display
 .kerInfo b{font-size:13.5px;font-weight:700}.kerInfo .tot{font-weight:800;font-size:15px;align-self:end}
 .waPil{flex:none;display:flex;align-items:center;gap:6px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;font-size:14px;border-radius:11px;padding:9px 12px 9px 9px}
 .waPil .waLogo{width:24px;height:24px}
+/* ===== kunci layar: hanya daftar yang bisa digulir, header tidak ikut tergeser ===== */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+.isi{overscroll-behavior:contain}
+@media (max-width:599px){
+  .app{position:fixed;top:0;left:0;right:0;bottom:0;height:auto;max-width:none;margin:0}
+}
 </style></head>
 <body class="gs h4 t5">
 <div class="app">
@@ -530,8 +536,8 @@ function gambar(){
   $('isi').querySelectorAll('.item').forEach(pasangKetukBarang);
   $('isi').querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
     var x=DAFTAR[+b.dataset.add],n=KER[x.n]||0;
-    if(n>=x.q){toast('Stok '+x.n+' cuma '+x.q);return;}
-    setQty(x.n,n+1);toast('+1 '+x.n);};});
+    if(n){setQty(x.n,0);toast('✕ Batal: '+x.n);return;}       // sudah dipilih → ketuk lagi = batal
+    setQty(x.n,1);toast('✓ Masuk keranjang · tekan lama untuk atur jumlah');};});
 }
 /* ketuk barang = salin "nama (qty) harga" · tekan lama = buka detail */
 function teksSatu(x){return x.n+' ('+x.q+') '+(x.h?rp(x.h):'tanya harga');}
