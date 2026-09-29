@@ -201,15 +201,109 @@ body.gs .gisi .item:nth-child(even){background:#f5f7f6}
 body.gs .grup{border-bottom:1px solid #e3e3e3}
 body.gs .grup.buka{background:#eef3f0}
 body.gs section>.grup:last-child,body.gs section>.gisi:last-child .item:last-child{border-bottom:0}
+
+/* ============ HEADER HEMAT TEMPAT ============ */
+.btnCari{display:none;margin-left:auto;border:0;background:rgba(255,255,255,.15);color:#fff;width:34px;height:34px;border-radius:17px;font-size:15px;cursor:pointer}
+.infoMini{display:none;padding:8px 12px 0;font-size:11px;color:var(--abu2)}
+.tabs{position:relative}
+.menuTab{position:absolute;top:calc(100% + 4px);left:0;z-index:20;background:#fff;border:1px solid var(--garis);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;min-width:170px;display:flex;flex-direction:column}
+.menuTab .mt{border:0;background:none;text-align:left;padding:10px 12px;font-size:14px;font-weight:700;color:var(--tinta);border-radius:8px;cursor:pointer}
+.menuTab .mt.on{background:var(--hijau2);color:var(--hijau)}
+/* 1 · Menyusut saat digulir */
+.h1 .judul,.h1 .info{transition:max-height .2s ease,opacity .2s,margin .2s;overflow:hidden;max-height:40px}
+.h1 .kepala,.h1 .cari{transition:padding .2s,margin .2s}
+.h1 .app.susut .judul,.h1 .app.susut .info{max-height:0;opacity:0;margin:0}
+.h1 .app.susut .kepala{padding-top:8px;padding-bottom:8px}
+.h1 .app.susut .cari{margin-top:0}
+.h1 .app.susut .tabs{padding:6px 10px}
+.h1 .app.susut .tab{padding:5px 10px;font-size:12.5px}
+.h1 .app.susut .sub{margin-bottom:6px}
+.h1 .app.susut .sc{padding:5px 4px}
+/* 2 · Ringkas permanen */
+.h2 .kepala{display:flex;align-items:center;gap:10px;padding:8px 10px}
+.h2 .judul .jt{display:none}
+.h2 .judul .logo{font-size:12px;padding:5px 7px;border-radius:9px}
+.h2 .info{display:none}
+.h2 .cari{margin-top:0;flex:1}
+.h2 .cari input{padding:8px 0}
+.h2 .tabs{padding:6px 8px;gap:5px}
+.h2 .tab{padding:5px 8px;font-size:12.5px}
+.h2 .sub{margin:0 8px 6px;padding:2px}
+.h2 .sc{padding:5px 4px;font-size:12px}
+.h2 .infoMini{display:block}
+/* 3 · Satu baris: menu tab + pilihan jenis, cari lewat ikon */
+.h3 .kepala{padding:8px 10px 8px 12px}
+.h3 .info{display:none}
+.h3 .btnCari{display:block}
+.h3 .cari{display:none;margin-top:8px}
+.h3 .kepala.cari-buka .cari{display:flex}
+.h3 .atas{display:flex;align-items:center;gap:6px;padding:6px 8px}
+.h3 .tabs{padding:0;flex:none}
+.h3 .tab{padding:7px 12px;font-size:13px}
+.h3 .panah{font-size:10px;margin-left:2px}
+.h3 .sub{margin:0;flex:1;padding:2px}
+.h3 .sc{padding:6px 4px;font-size:12px}
+.h3 .infoMini{display:block}
+
+/* 4 · Kategori di header hijau */
+.h4 .kepala{padding:8px 8px 8px 10px}
+.h4 .judul{gap:6px}
+.h4 .judul .jt,.h4 .info{display:none}
+.h4 .judul .logo{flex:none}
+.h4 .tabs{flex:1;min-width:0;padding:0;gap:5px;overflow-x:auto;scrollbar-width:none}
+.h4 .tabs::-webkit-scrollbar{display:none}
+.h4 .tab{flex:1 0 auto;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 9px;font-size:12.5px}
+.h4 .tab.on{background:#fff;color:var(--hijau);border-color:#fff}
+.h4 .tabs.cari-mode .tab{opacity:.6}
+.h4 .btnCari{display:block;flex:none;margin-left:0}
+.h4 .cari{display:none;margin-top:8px}
+.h4 .kepala.cari-buka .cari{display:flex}
+.h4 .atas{padding:6px 8px}
+.h4 .sub{margin:0;padding:2px}
+.h4 .sc{padding:6px 4px;font-size:12.5px}
+.h4 .infoMini{display:block}
+@media (max-width:370px){.h4 .judul .logo{display:none}.h4 .tab{padding:6px 7px;font-size:12px}}
+
+/* ===== Header putih garis (E) ===== */
+/* E · Putih bersih + garis bawah hijau */
+.t5 .kepala{background:#fff;color:var(--tinta);padding:4px 8px 0 10px;border-bottom:1px solid var(--garis)}
+.t5 .judul{align-items:stretch;min-height:46px}
+.t5 .judul .logo{align-self:center;background:var(--hijau);color:#fff}
+.t5 .tabs{gap:2px;align-items:stretch}
+.t5 .tab{border:0;border-radius:0;background:transparent;color:#8a857c;font-size:13.5px;font-weight:700;padding:0 8px;position:relative;display:flex;align-items:center;justify-content:center}
+.t5 .tab.on{background:transparent;color:var(--hijau)}
+.t5 .tab.on::after{content:'';position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--hijau)}
+.t5 .btnCari{align-self:center;background:transparent;color:var(--hijau);font-size:16px}
+.t5 .kepala.cari-buka{padding-bottom:8px}
+.t5 .cari{border:1px solid var(--garis)}
+.t5 .atas{background:#fff}
+@media (max-width:370px){.t5 .tab{padding:0 5px;font-size:12.5px}.t5 .tab.on::after{left:6px;right:6px}}
+/* ===== Menyusut saat digulir / saat mencari ===== */
+.jejak{display:none}
+.h4 .atas{transition:max-height .2s ease,padding .2s,opacity .2s;max-height:60px;overflow:hidden}
+/* digulir ke bawah → sisakan kategori & jenis yang aktif saja */
+.h4 .app.susut .tab:not(.on){display:none}
+.h4 .app.susut .tab.on::after{display:none}
+.h4 .app.susut .jejak{display:flex;align-items:center;flex:1;min-width:0;font-size:13.5px;font-weight:700;color:#8a857c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h4 .app.susut .tabs{flex:none}
+.h4 .app.susut .judul{cursor:pointer}
+.h4 .app.susut .atas{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:0}
+/* sedang mencari → sembunyikan kategori & jenis */
+.h4 .kepala.cari-buka .tabs,.h4 .kepala.cari-buka .jejak{display:none}
+.h4 .kepala.cari-buka .judul::after{content:'Cari barang';flex:1;font-size:14px;font-weight:800;color:var(--hijau);order:1;align-self:center}
+.h4 .kepala.cari-buka .btnCari{order:2}
+.h4 .app:has(.kepala.cari-buka) .atas{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:0}
+.h4 .app.mencari .atas{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:0}
+input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 </style></head>
-<body class="gs">
+<body class="gs h4 t5">
 <div class="app">
   <div class="kepala">
-    <div class="judul"><span class="logo">PG</span>Katalog PGNet</div>
+    <div class="judul"><span class="logo">PG</span><span class="jt">Katalog PGNet</span><div class="tabs" id="tabs"></div><span class="jejak" id="jejak"></span><button class="btnCari" id="btnCari" title="Cari">🔍</button></div>
     <div class="info" id="info">Memuat…</div>
     <div class="cari" id="cariBox"><span class="ik">🔍</span><input id="cari" type="search" placeholder="Cari: i5 8400, nvme 512, ddr4 8gb…" autocomplete="off" enterkeyhint="search"><span class="x" id="hapus">✕</span></div>
   </div>
-  <div class="atas"><div class="tabs" id="tabs"></div><div class="sub" id="sub"></div></div>
+  <div class="atas"><div class="sub" id="sub"></div></div>
   <div class="isi" id="isi"></div>
   <button class="naik" id="naik" title="Ke atas">↑</button>
   <div class="barBagi" id="barBagi"></div>
@@ -339,14 +433,24 @@ function salin(t,pesan){
 
 /* ===================== TAMPILAN ===================== */
 function subAda(t){return (SUB[t]||[]).filter(function(n){return KAT.some(function(k){return k.t===t&&k.s===n;});});}
+var MENU_TAB=false;
+function modeMenu(){return document.body.classList.contains('h3');}
 function gambarTab(){
   $('tabs').className='tabs'+(q?' cari-mode':'');
+  if(modeMenu()){   /* satu tombol "Processor ▾" + menu kecil */
+    $('tabs').innerHTML='<button class="tab on pilihTab" id="pilihTab">'+esc(TAB[aktif])+' <span class="panah">▾</span></button>'+
+      (MENU_TAB?'<div class="menuTab">'+TAB.map(function(n,i){return '<button class="mt'+(i===aktif?' on':'')+'" data-t="'+i+'">'+esc(n)+'</button>';}).join('')+'</div>':'');
+    $('pilihTab').onclick=function(e){e.stopPropagation();MENU_TAB=!MENU_TAB;gambarTab();};
+    $('tabs').querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(e){e.stopPropagation();
+      MENU_TAB=false;aktif=+b.dataset.t;q='';$('cari').value='';$('cariBox').classList.remove('ada');tutupCari();gambar();$('isi').scrollTop=0;};});
+  }else
   $('tabs').innerHTML=TAB.map(function(n,i){return '<button class="tab'+(!q&&i===aktif?' on':'')+'" data-t="'+i+'">'+esc(n)+'</button>';}).join('');
-  $('tabs').querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){
-    aktif=+b.dataset.t;q='';$('cari').value='';$('cariBox').classList.remove('ada');gambar();$('isi').scrollTop=0;};});
+  if(!modeMenu())$('tabs').querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){
+    aktif=+b.dataset.t;q='';$('cari').value='';$('cariBox').classList.remove('ada');tutupCari();gambar();$('isi').scrollTop=0;};});
   var sub=subAda(aktif);
   $('sub').innerHTML=(q||sub.length<2)?'':sub.map(function(n,i){return '<button class="sc'+(i===subAktif[aktif]?' on':'')+'" data-s="'+i+'">'+esc(n)+'</button>';}).join('');
   $('sub').querySelectorAll('[data-s]').forEach(function(c){c.onclick=function(){subAktif[aktif]=+c.dataset.s;gambar();$('isi').scrollTop=0;};});
+  $('jejak').textContent=(!q&&sub.length>1)?'› '+sub[subAktif[aktif]]:'';
 }
 var SVG_BAGI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
 var IKON_BAGI='<span class="ik">'+SVG_BAGI+'</span><svg class="cek" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -378,6 +482,7 @@ function gambar(){
     if(blok)h+='<section id="sek-'+slug(k.k)+'"><div class="kat"><span class="kj">'+esc(k.k)+'</span><span class="kanan"><span class="kol"><i class="kq">Qty</i><i class="kh">Harga</i></span>'+(q?'':'<span class="kn">'+jenis+' jenis</span>')+
       '<button class="ibagi kbagi'+(PILIH.k[KAT.indexOf(k)]?' dipilih':'')+'" data-ki="'+KAT.indexOf(k)+'" title="Pilih seluruh kategori untuk dibagikan">'+IKON_BAGI+'</button></span></div>'+blok+'</section>';
   });
+  h='<div class="infoMini">Update '+esc(UPD)+(JAM?' · '+esc(JAM):'')+'</div>'+h;
   if(q)h=(n?'<div class="jumlah">'+n+' barang cocok dengan "'+esc(q)+'"</div>':'')+h;
   $('isi').innerHTML=h||(q?'<div class="kosong"><b>Barang tidak ketemu</b>Coba kata lain (misal "8400" atau "nvme 1tb"), atau tanya langsung lewat WhatsApp.</div>'
                           :'<div class="kosong"><b>Stok kosong</b>Belum ada barang ready di bagian ini.</div>');
@@ -643,6 +748,26 @@ $('cari').oninput=function(){
 $('hapus').onclick=function(){$('cari').value='';q='';$('cariBox').classList.remove('ada');gambar();$('cari').focus();};
 $('isi').onscroll=function(){$('naik').classList.toggle('on',this.scrollTop>600);};
 $('naik').onclick=function(){$('isi').scrollTo({top:0,behavior:'smooth'});};
+
+/* ===================== HEADER HEMAT TEMPAT ===================== */
+var gulirAkhir=0,kunciGulir=0;
+$('isi').addEventListener('scroll',function(){
+  var e=this,t=e.scrollTop,app=document.querySelector('.app'),now=Date.now();
+  if(now<kunciGulir){gulirAkhir=t;return;}                       // abaikan sesaat setelah berubah (anti kedip)
+  var ruang=e.scrollHeight-e.clientHeight, susut=app.classList.contains('susut');
+  if(!susut&&t>gulirAkhir+4&&t>24&&ruang>160){app.classList.add('susut');kunciGulir=now+350;}      // gulir ke bawah → menyusut
+  else if(susut&&(t<gulirAkhir-8||t<4)){app.classList.remove('susut');kunciGulir=now+350;}        // gulir ke atas → muncul lagi
+  gulirAkhir=t;
+},{passive:true});
+document.querySelector('.judul').addEventListener('click',function(e){
+  var app=document.querySelector('.app');
+  if(app.classList.contains('susut')&&!e.target.closest('#btnCari')){e.stopPropagation();e.preventDefault();app.classList.remove('susut');kunciGulir=Date.now()+400;}
+},true);
+function tutupCari(){document.querySelector('.kepala').classList.remove('cari-buka');document.querySelector('.app').classList.remove('mencari');}
+$('btnCari').onclick=function(){var k=document.querySelector('.kepala');
+  if(k.classList.contains('cari-buka')&&!$('cari').value){tutupCari();return;}
+  k.classList.add('cari-buka');document.querySelector('.app').classList.add('mencari');$('cari').focus();};
+document.addEventListener('click',function(){if(MENU_TAB){MENU_TAB=false;gambarTab();}});
 
 /* ===================== MULAI ===================== */
 (function(){
