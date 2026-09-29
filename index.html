@@ -319,6 +319,19 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display
 .h4 .kepala.cari-buka .btnSemua{display:none}
 .h4 .kepala.cari-buka .aksi{order:2}
 @media (max-width:390px){.logoImg{width:30px;height:30px}.t5 .tab{padding:0 5px;font-size:13px}.btnSemua,.h4 .btnCari{width:30px;height:30px}}
+
+/* ===== bar keranjang (1 bar) + logo WhatsApp ===== */
+.waLogo{width:26px;height:26px;display:block}
+.app.kerKosong .bawah{display:none}
+.app.kerKosong .barBagi{bottom:calc(14px + env(safe-area-inset-bottom))}
+.app.kerKosong .toast{bottom:24px}
+.app.kerKosong .barBagi.on ~ .toast{bottom:86px}
+.gb2{display:flex;width:100%;gap:8px;align-items:center;background:var(--hijau);border-radius:14px;padding:6px 6px 6px 14px}
+.kerInfo{flex:1;min-width:0;border:0;background:none;color:#fff;text-align:left;cursor:pointer;padding:0;display:grid;grid-template-columns:1fr auto;column-gap:8px}
+.kerInfo .kc2{grid-column:1/3;font-size:11px;opacity:.75;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+.kerInfo b{font-size:13.5px;font-weight:700}.kerInfo .tot{font-weight:800;font-size:15px;align-self:end}
+.waPil{flex:none;display:flex;align-items:center;gap:6px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;font-size:14px;border-radius:11px;padding:9px 12px 9px 9px}
+.waPil .waLogo{width:24px;height:24px}
 </style></head>
 <body class="gs h4 t5">
 <div class="app">
@@ -547,12 +560,14 @@ function segarBaris(nama){   // perbarui tombol di daftar tanpa gambar ulang sem
     row.classList.toggle('dikeranjang',!!KER[nama]);
     var b=row.querySelector('.tb'),n=KER[nama]||0; b.className='tb'+(n?' isi-k':''); b.textContent=n?n+' ✓':'+'; });
 }
+var SVG_WA='<svg class="waLogo" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fff" d="M16 3.2C8.9 3.2 3.2 8.8 3.2 15.8c0 2.4.7 4.7 1.9 6.7L3.1 28.9l6.6-2c1.9 1.1 4.1 1.6 6.3 1.6 7.1 0 12.8-5.6 12.8-12.7S23.1 3.2 16 3.2z"/><path fill="#25D366" d="M11.7 9.5c-.3-.6-.6-.6-.9-.6h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.3s1.4 3.8 1.6 4.1c.2.3 2.8 4.4 6.8 6 3.3 1.3 4 1 4.7.9.7-.1 2.3-1 2.7-1.9.3-.9.3-1.7.2-1.9-.1-.2-.4-.3-.8-.5l-2.6-1.3c-.3-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.3-.4.3-.8.1-.4-.2-1.7-.6-3.2-2-1.2-1.1-2-2.4-2.2-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.3.1-.5 0-.7l-1.3-2.7z"/></svg>';
 function gambarBawah(){
-  var T=totalKer(), sapa=waLink('Halo PGNet, mau tanya stok barang:\n');
-  if(!T.j){$('bawah').innerHTML='<a class="wa" target="_blank" rel="noopener" href="'+sapa+'">💬 Tanya stok via WhatsApp</a>';return;}
-  // keranjang ada isinya → tombol WA langsung mengirim daftar keranjang
-  $('bawah').innerHTML='<a class="wa kecil" target="_blank" rel="noopener" title="Kirim isi keranjang via WhatsApp" href="'+waLink('Halo PGNet, saya mau pesan:\n\n'+teksKer())+'">💬</a>'+
-    '<button class="btnKer" id="btnKer"><div><b>🛒 Keranjang</b><br><span>'+T.j+' jenis · '+T.u+' pcs</span></div><div class="tot">'+rp(T.t)+'</div></button>';
+  var T=totalKer(), app=document.querySelector('.app');
+  app.classList.toggle('kerKosong',!T.j);
+  if(!T.j){$('bawah').innerHTML='';return;}            // keranjang kosong → tidak ada tombol di bawah
+  var wa=waLink('Halo PGNet, saya mau pesan:\n\n'+teksKer());
+  $('bawah').innerHTML='<div class="gb2"><button class="kerInfo" id="btnKer"><span class="kc2">Keranjang</span><b>🛒 '+T.j+' jenis · '+T.u+' pcs</b><span class="tot">'+rp(T.t)+'</span></button>'+
+    '<a class="waPil" target="_blank" rel="noopener" href="'+wa+'">'+SVG_WA+'Pesan</a></div>';
   $('btnKer').onclick=bukaKeranjang;
 }
 
