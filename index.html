@@ -506,7 +506,7 @@ function tanyaCari(t){return '<a class="tanyaWA" target="_blank" rel="noopener" 
    Dibandingkan dengan isi katalog saat customer terakhir membuka.
    - BARU  : barang yang sebelumnya belum ada / habis, sekarang ready
    - TURUN : harga lebih murah dari sebelumnya  (harga naik TIDAK ditandai)
-   Label tampil 3 hari. Pengunjung pertama kali tidak diberi label. */
+   Label stok masuk tampil 2 hari, harga turun 3 hari. Pengunjung pertama kali tidak diberi label. */
 var TANDA={}, AWAL=null, FOKUS=false;
 function hitungTanda(){
   var now=Date.now(), T=lsBaca(LS_TANDA)||{};
@@ -516,7 +516,7 @@ function hitungTanda(){
     else if(o[1]&&x.h&&x.h<o[1]){ var t=T[n],dari=Math.max(o[1],(t&&t.j==='turun'&&t.dari)||0);
       if(!t||t.j!=='turun'||t.dari!==dari)T[n]={j:'turun',dari:dari,ts:now}; } });
   Object.keys(T).forEach(function(n){ var t=T[n],x=PETA[n];
-    if(!x||now-t.ts>3*864e5||(t.j==='turun'&&(!x.h||x.h>=t.dari)))delete T[n]; });
+    if(!x||now-t.ts>(t.j==='baru'?2:3)*864e5||(t.j==='turun'&&(!x.h||x.h>=t.dari)))delete T[n]; });
   TANDA=T; lsTulis(LS_TANDA,T);
   var b={}; Object.keys(PETA).forEach(function(n){b[n]=[PETA[n].q,PETA[n].h];}); lsTulis(LS_LIHAT,{ts:now,b:b});
 }
